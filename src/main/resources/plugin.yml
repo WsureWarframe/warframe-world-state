@@ -1,0 +1,6 @@
+name: "WarframeWorldState"
+author: "WsureDev"
+version: "0.0.1-alpha"
+main: "top.wsure.warframe.WorldState"
+info: "WarframeWorldState Web: https://github.com/WsureDev/mirai-console-plugins/WarframeWorldState"
+depends: []
