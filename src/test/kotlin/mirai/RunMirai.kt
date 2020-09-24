@@ -3,6 +3,9 @@ package mirai
 import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.console.command.CommandManager
 import net.mamoe.mirai.console.pure.MiraiConsolePureLoader
+import top.wsure.warframe.WorldState
+import top.wsure.warframe.enums.WorldStateKey
+import top.wsure.warframe.utils.OkHttpUtils
 
 object RunMirai {
 
@@ -11,9 +14,10 @@ object RunMirai {
     @JvmStatic
     fun main(args: Array<String>) {
         // 默认在 /test 目录下运行
-
-        MiraiConsolePureLoader.load(args[0], args[1]) // 启动 console
-
-        runBlocking { CommandManager.join() } // 阻止主线程退出
+//
+//        MiraiConsolePureLoader.load(args[0], args[1]) // 启动 console
+//
+//        runBlocking { CommandManager.join() } // 阻止主线程退出
+        print(OkHttpUtils.doGet(WorldState.NYMPH_HOST +"fissures"))
     }
 }

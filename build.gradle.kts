@@ -22,10 +22,11 @@ repositories {
 }
 
 val miraiCoreVersion = "+" // 1.2.2
-val miraiConsoleVersion = "+" // 1.0-M4-dev-3
+val miraiConsoleVersion = "0.5.2" // 不要1.0
 
 dependencies {
     compileOnly(kotlin("stdlib-jdk8"))
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
     compileOnly("net.mamoe:mirai-core:$miraiCoreVersion")
     compileOnly("net.mamoe:mirai-console:$miraiConsoleVersion")
 

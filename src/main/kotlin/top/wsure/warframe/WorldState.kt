@@ -1,28 +1,20 @@
 package top.wsure.warframe
 
-import com.google.auto.service.AutoService
-import net.mamoe.mirai.console.plugin.jvm.JvmPlugin
-import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.console.plugin.jvm.SimpleJvmPluginDescription
-import net.mamoe.mirai.event.events.FriendInputStatusChangedEvent
-import net.mamoe.mirai.event.events.MessagePreSendEvent
+import net.mamoe.mirai.console.plugins.PluginBase
 import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.event.subscribeAlways
-import net.mamoe.mirai.event.subscribeFriendMessages
 import net.mamoe.mirai.event.subscribeMessages
-import net.mamoe.mirai.message.FriendMessageEvent
-import net.mamoe.mirai.message.data.content
+import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.message.MessageReceipt
+import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
+import top.wsure.warframe.enums.WorldStateKey
+import top.wsure.warframe.utils.OkHttpUtils
 
-@AutoService(JvmPlugin::class)
-object WorldState : KotlinPlugin(
-    SimpleJvmPluginDescription("top.wsure.warframe" ,
-            "0.0.1-alpha")
-) {
+object WorldState : PluginBase() {
+    const val NYMPH_HOST = "http://nymph.rbq.life:3000/wf/robot/"
     override fun onLoad() {
         super.onLoad()
-        print("芜湖，起飞🛫️")
-
     }
 
     override fun onEnable() {
@@ -30,10 +22,19 @@ object WorldState : KotlinPlugin(
 
         logger.info("Plugin loaded!")
 
-        subscribeMessages {
-            "greeting" reply { "Hello ${sender.nick}" }
+        subscribeAlways<MessageEvent> { event ->
+            val key = WorldStateKey.getByKeyWord(event.message.contentToString())
+            if (key != null) {
+                val response = OkHttpUtils.doGet(NYMPH_HOST+key.name)
+                logger.info { "${event.senderName} 查询 ${key.keyWord}" }
+                if(response != null){
+                    event.reply(PlainText(response))
+                }
+            }
         }
 
-        subscribeAlways<FriendMessageEvent> { event -> reply("你说了 :${event.message.content}") }
+        subscribeAlways<MessageRecallEvent> { event ->
+            logger.info { "${event.authorId} 的消息被撤回了" }
+        }
     }
 }

@@ -1,2 +1,7 @@
 # Project exclude paths
 /.gradle/
+build/
+
+.idea/
+
+warframe-world-state.iml
