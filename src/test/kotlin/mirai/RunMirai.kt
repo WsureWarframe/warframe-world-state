@@ -19,5 +19,7 @@ object RunMirai {
 //
 //        runBlocking { CommandManager.join() } // 阻止主线程退出
         print(OkHttpUtils.doGet(WorldState.NYMPH_HOST +"fissures"))
+        println()
+        print(WorldStateKey.values().joinToString("\n") { e -> e.keyWord })
     }
 }

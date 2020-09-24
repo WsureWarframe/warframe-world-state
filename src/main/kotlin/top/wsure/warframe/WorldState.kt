@@ -3,9 +3,7 @@ package top.wsure.warframe
 import net.mamoe.mirai.console.plugins.PluginBase
 import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.event.subscribeAlways
-import net.mamoe.mirai.event.subscribeMessages
 import net.mamoe.mirai.message.MessageEvent
-import net.mamoe.mirai.message.MessageReceipt
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
 import top.wsure.warframe.enums.WorldStateKey
@@ -13,6 +11,7 @@ import top.wsure.warframe.utils.OkHttpUtils
 
 object WorldState : PluginBase() {
     const val NYMPH_HOST = "http://nymph.rbq.life:3000/wf/robot/"
+    private const val HELP_KEY = "help"
     override fun onLoad() {
         super.onLoad()
     }
@@ -30,6 +29,10 @@ object WorldState : PluginBase() {
                 if(response != null){
                     event.reply(PlainText(response))
                 }
+            }
+
+            if(event.message.contentToString().contains(HELP_KEY)){
+                event.reply(PlainText(WorldStateKey.getHelpMenu()))
             }
         }
 
