@@ -2,5 +2,5 @@ name: "WarframeWorldState"
 author: "WsureDev"
 version: "0.0.1-alpha"
 main: "top.wsure.warframe.WorldState"
-info: "WarframeWorldState Web: https://github.com/WsureDev/mirai-console-plugins/WarframeWorldState"
+info: "发送help获取菜单，文档地址: https://github.com/WsureDev/warframe-world-state"
 depends: []

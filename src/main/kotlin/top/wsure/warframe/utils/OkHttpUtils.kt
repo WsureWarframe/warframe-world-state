@@ -5,7 +5,6 @@ import okhttp3.Request
 import java.util.concurrent.TimeUnit
 
 /**
- * Copyright (C), 上海维跃信息科技有限公司
  * FileName: OkHttpUtils
  * Author:   wsure
  * Date:     2020/9/24 4:44 下午

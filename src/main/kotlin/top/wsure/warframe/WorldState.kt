@@ -6,11 +6,13 @@ import net.mamoe.mirai.event.subscribeAlways
 import net.mamoe.mirai.message.MessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
+import top.wsure.warframe.enums.BeginWithKeyword
 import top.wsure.warframe.enums.WorldStateKey
+import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
 
 object WorldState : PluginBase() {
-    const val NYMPH_HOST = "http://nymph.rbq.life:3000/wf/robot/"
+
     private const val HELP_KEY = "help"
     override fun onLoad() {
         super.onLoad()
@@ -22,18 +24,25 @@ object WorldState : PluginBase() {
         logger.info("Plugin loaded!")
 
         subscribeAlways<MessageEvent> { event ->
-            val key = WorldStateKey.getByKeyWord(event.message.contentToString())
-            if (key != null) {
-                val response = OkHttpUtils.doGet(NYMPH_HOST+key.name)
-                logger.info { "${event.senderName} 查询 ${key.keyWord}" }
+            val messageContent = event.message.contentToString()
+            val host = MessageUtils.getUrlByEnum(messageContent)
+            if (host != null) {
+                val response = OkHttpUtils.doGet(host)
+                logger.info { "${event.senderName} 查询 $host" }
                 if(response != null){
                     event.reply(PlainText(response))
                 }
             }
 
-            if(event.message.contentToString().contains(HELP_KEY)){
-                event.reply(PlainText(WorldStateKey.getHelpMenu()))
+            if(messageContent == HELP_KEY){
+                val messageChain =  MessageChainBuilder()
+                    .append(PlainText("warframe-world-state插件功能如下\n"))
+                    .append(PlainText(BeginWithKeyword.getHelpMenu()))
+                    .append(PlainText(WorldStateKey.getHelpMenu()))
+                    .build()
+                event.reply(messageChain)
             }
+
         }
 
         subscribeAlways<MessageRecallEvent> { event ->

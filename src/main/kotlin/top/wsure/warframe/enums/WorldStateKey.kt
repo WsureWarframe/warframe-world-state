@@ -4,7 +4,6 @@ import java.util.*
 import java.util.stream.Stream
 
 /**
- * Copyright (C), 上海维跃信息科技有限公司
  * FileName: WorldStateKey
  * Author:   wsure
  * Date:     2020/9/24 10:26 上午
