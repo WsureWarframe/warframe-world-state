@@ -1,7 +1,7 @@
 # warframe-world-state
 ### 兼容Mirai-Console 0.5.2 
 ### 兼容MiraiAndroid
-### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api)提供给接口服务
+### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api) 提供给接口服务
 # warframe-world-state （Warframe世界状态查询插件）
 - 群：[435021808](https://jq.qq.com/?_wv=1027&k=rGrjxfv0) 
 # 特色
