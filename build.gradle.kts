@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "top.wsure.warframe"
-version = "0.0.3-alpha"
+version = "0.0.3"
 
 repositories {
     mavenLocal()
@@ -16,7 +16,7 @@ repositories {
     maven("https://dl.bintray.com/kotlin/kotlin-eap")
 }
 
-val miraiCoreVersion = "+" // 1.2.2
+val miraiCoreVersion = "+" // 2.0.0
 val miraiConsoleVersion = "+" //
 
 dependencies {

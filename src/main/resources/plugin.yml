@@ -1,6 +1,7 @@
 name: "WarframeWorldState"
 author: "WsureDev"
-version: "0.0.3-alpha"
+version: "0.0.3"
 id: "top.wsure.warframe.WorldState"
 info: "发送help获取菜单，文档地址: https://github.com/WsureDev/warframe-world-state"
+main: "top.wsure.warframe.WorldState"
 depends: []
