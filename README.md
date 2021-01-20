@@ -1,14 +1,24 @@
 # warframe-world-state
-### 兼容Mirai-Console 0.5.2 
+### 兼容Mirai-Console 
+    最新:
+    Mirai-Console 2.0.0 ->  0.0.3 
+    历史:
+    Mirai-Console 0.5.2 ->  0.0.2-alpha
+                            0.0.1-alpha
 ### 兼容MiraiAndroid
+    最新: 
+    MiraiAndroid 3.0.0 ->  0.0.3
+    历史:
+    MiraiAndroid 2.10.4 ->  0.0.2-alpha
+                            0.0.1-alpha
 ### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api) 提供给接口服务
 # warframe-world-state （Warframe世界状态查询插件）
 - 群：[435021808](https://jq.qq.com/?_wv=1027&k=rGrjxfv0) 
 # 特色
 - 支持warframe世界状态查询、包括赏金任务  
 # 基本使用方法
-0. 从 [Release](https://github.com/WsureDev/warframe-world-state/releases) 下载 插件
-1. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid`
+0. 从 [Release](https://github.com/WsureDev/warframe-world-state/releases) 下载 插件(兼容性查看上方)
+1. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid`(兼容性查看上方)
 2. 在安卓手机上安装MiraiAndroid
 3.  - 点击左上角 
     - 插件管理 

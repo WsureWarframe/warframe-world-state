@@ -14,8 +14,13 @@ import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
 
 object WorldState : KotlinPlugin(
-        @OptIn(ConsoleExperimentalApi::class)
-        JvmPluginDescription.loadFromResource()
+//        @OptIn(ConsoleExperimentalApi::class)
+//        JvmPluginDescription.loadFromResource()
+    JvmPluginDescription(
+        version = "0.0.3",
+        id = "top.wsure.warframe.WorldState",
+        name = "WarframeWorldState",
+    )
 ) {
 
     private const val HELP_KEY = "help"
@@ -37,11 +42,11 @@ object WorldState : KotlinPlugin(
 
             if (messageContent == HELP_KEY) {
                 val messageChain = MessageChainBuilder()
-                        .append(PlainText("warframe-world-state插件功能如下\n"))
-                        .append(PlainText(BeginWithKeyword.getHelpMenu()))
-                        .append(PlainText("\n"))
-                        .append(PlainText(WorldStateKey.getHelpMenu()))
-                        .build()
+                    .append(PlainText("warframe-world-state插件功能如下\n"))
+                    .append(PlainText(BeginWithKeyword.getHelpMenu()))
+                    .append(PlainText("\n"))
+                    .append(PlainText(WorldStateKey.getHelpMenu()))
+                    .build()
                 event.subject.sendMessage(messageChain)
             }
 
@@ -51,6 +56,7 @@ object WorldState : KotlinPlugin(
             logger.info { "${event.authorId} 的消息被撤回了" }
         }
     }
+
     /**
      * Will be invoked when the plugin is disabled
      */
