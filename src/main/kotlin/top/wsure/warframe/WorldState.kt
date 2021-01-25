@@ -7,8 +7,10 @@ import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.event.globalEventChannel
-import org.apache.ibatis.session.SqlSession
-import top.wsure.warframe.dao.UserMapper
+import org.ktorm.dsl.forEach
+import org.ktorm.dsl.from
+import org.ktorm.dsl.insert
+import org.ktorm.dsl.select
 import top.wsure.warframe.entity.User
 import top.wsure.warframe.enums.BeginWithKeyword
 import top.wsure.warframe.enums.WorldStateKey
@@ -32,6 +34,12 @@ object WorldState : KotlinPlugin(
 
 
     override fun onEnable() {
+        val osName = System.getProperty("os.name").split(" ")[0]
+        val osArch = System.getProperty("os.arch")
+        logger.info{"os.name:${osName}"}
+        logger.info{"os.arch:${osArch}"}
+        logger.info{"os.version:${System.getProperty("os.version")}"}
+
         super.onEnable()
 
         logger.info("Plugin loaded!")
@@ -66,14 +74,25 @@ object WorldState : KotlinPlugin(
         globalEventChannel().subscribeAlways<MessageRecallEvent> { event ->
             logger.info { "${event.authorId} 的消息被撤回了" }
         }
-        val file:File = resolveDataFile("test.db")
+        val file:File = resolveDataFile("test")
 
-        val session: SqlSession  = SqliteUtils.sqlSessionFactory(file).openSession(true)
+        try {
+            val initDatabase = SqliteUtils.getDatabase(file)
+            SqliteUtils.initTableIfNotExist(initDatabase)
+            initDatabase.from(User)
+                .select(User.columns)
+                .forEach { row -> logger.info("user id:${row[User.id]} , nick:${row[User.nick]}") }
+            initDatabase.insert(User){
+                set(it.id,929834382)
+                set(it.nick,"an user")
+            }
+            initDatabase.from(User)
+                .select(User.columns)
+                .forEach { row -> logger.info("user id:${row[User.id]} , nick:${row[User.nick]}") }
+        }catch (e:Exception){
+            logger.error(e.stackTraceToString())
+        }
 
-        val mapper:UserMapper = session.getMapper(UserMapper::class.java)
-        mapper.insert(User(id= 844157922,nick ="test"))
-
-        session.close()
     }
 
     /**

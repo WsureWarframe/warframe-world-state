@@ -1,7 +1,9 @@
 package top.wsure.warframe.entity
 
-import com.baomidou.mybatisplus.annotation.TableId
-import java.util.*
+import org.ktorm.schema.Table
+import org.ktorm.schema.date
+import org.ktorm.schema.long
+import org.ktorm.schema.varchar
 
 /**
  * Copyright (C), 上海维跃信息科技有限公司
@@ -11,12 +13,12 @@ import java.util.*
  * Description:user
  */
 
-data class User (
-    @TableId
-    var id: Long? = null,
-    var nick: String? = null,
-    var remark: String? = null,
-    var avatarUrl: String? = null,
-    val createDate: Date? = null,
-    val updateDate: Date? = null,
-)
+object User :Table<Nothing>("USER") {
+
+    var id = long("id").primaryKey()
+    var nick = varchar("nick")
+    var remark = varchar("remark")
+    var avatarUrl = varchar("avatar_url")
+    val createDate = date("create_date")
+    val updateDate = date("update_date")
+}

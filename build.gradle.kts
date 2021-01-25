@@ -28,8 +28,7 @@ dependencies {
 
     implementation("com.h2database:h2:1.4.200")
 
-    implementation("com.baomidou:mybatis-plus:3.4.2")
-
+    implementation("org.ktorm:ktorm-core:3.3.0")
 }
 
 kotlin.sourceSets.all { languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn") }
