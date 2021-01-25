@@ -25,15 +25,11 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
     implementation(kotlin("stdlib-jdk8"))
-    // SQLite
-    implementation("org.xerial:sqlite-jdbc:3.34.0")
 
-    implementation("org.sqldroid:sqldroid:1.0.3")
+    implementation("com.h2database:h2:1.4.200")
 
     implementation("com.baomidou:mybatis-plus:3.4.2")
 
-//    implementation ("com.thinkinglogic.builder:kotlin-builder-annotation:1.2.1")
-//    kapt("com.thinkinglogic.builder:kotlin-builder-processor:1.2.1")
 }
 
 kotlin.sourceSets.all { languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn") }

@@ -8,7 +8,6 @@ import org.apache.ibatis.logging.stdout.StdOutImpl
 import org.apache.ibatis.mapping.Environment
 import org.apache.ibatis.session.SqlSessionFactory
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
-import org.sqlite.JDBC
 import top.wsure.warframe.WorldState
 import top.wsure.warframe.dao.UserMapper
 import java.io.File
@@ -29,33 +28,24 @@ import javax.sql.DataSource
  */
 class SqliteUtils {
     companion object {
+        private val username:String = "Wsure"
+        private val password:String = "Wsure"
         fun sqliteDataSource(file: File):DataSource{
-            val url = "jdbc:sqlite:${file.absolutePath}"
+            val url = "jdbc:h2:file:${file.absolutePath}"
             val osName = System.getProperty("os.name").split(" ")[0]
             val osArch = System.getProperty("os.arch")
             WorldState.logger.info{"os.name:${osName}"}
             WorldState.logger.info{"os.arch:${osArch}"}
             WorldState.logger.info{"os.version:${System.getProperty("os.version")}"}
 
-            val libSo = "native/${osName}/${osArch}/${getSoTypeByOs(osName)}"
-            WorldState.logger.info("libSo : $libSo")
-            val libFilePath = "${file.parentFile.absolutePath}/${getSoTypeByOs(osName)}"
-            WorldState.logger.info("libFile : $libFilePath")
-            val libFile = File(libFilePath)
-            if(libFile.exists()){ libFile.delete()}
-            JDBC::class.java.getResourceAsStream(libSo).toFile(libFilePath)
-
-            System.load(libFile.absolutePath)
-
-            val driver = "org.sqlite.JDBC"
+            val driver = "org.h2.Driver"
             if(!file.exists()){
                 Class.forName(driver)
-                val metadata = DriverManager.getConnection(url).metaData
+                val metadata = DriverManager.getConnection(url, username, password).metaData
                 WorldState.logger.info{"metaData.url:${metadata.url}"}
             }
 
-
-            return PooledDataSource(driver, url, null, null)
+            return PooledDataSource(driver, url, username, password)
         }
 
         fun sqlSessionFactory(file: File): SqlSessionFactory {
@@ -70,7 +60,7 @@ class SqliteUtils {
         }
 
         private fun createTableIfNotExist(dataSource: DataSource) {
-            try {
+//            try {
                 val connection: Connection = dataSource.connection
                 val statement: Statement = connection.createStatement()
                 statement.execute(
@@ -83,24 +73,11 @@ class SqliteUtils {
                             "    update_date DATETIME DEFAULT NULL\n" +
                             ")"
                 )
-            } catch (e: SQLException) {
-                WorldState.logger.error(e)
-            }
+//            } catch (e: SQLException) {
+//                WorldState.logger.error(e)
+//            }
         }
 
-        fun InputStream.toFile(path: String) {
-            use { input ->
-                File(path).outputStream().use { input.copyTo(it) }
-            }
-        }
-
-        fun getSoTypeByOs(name:String):String{
-            return when (name) {
-                "Mac" -> "libsqlitejdbc.jnilib"
-                "Windows" -> "sqlitejdbc.dll"
-                else -> "libsqlitejdbc.so"
-            }
-        }
     }
 
 }
