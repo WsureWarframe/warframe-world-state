@@ -29,7 +29,50 @@ dependencies {
     implementation("com.h2database:h2:1.4.200")
 
     implementation("org.ktorm:ktorm-core:3.3.0")
+
+    implementation(files("${System.getProperty("java.home")}/lib/rt.jar"))
+
 }
+
+//sourceSets{
+//    main {
+//        java {
+//            exclude("apple/**")
+//            exclude("com/**")
+//            exclude("java/**")
+////        exclude("javax/**")
+//            exclude("/jdk/**")
+//            exclude("sun/**")
+//            exclude("org/ietf/**")
+//            exclude("org/jcp/**")
+//            exclude("org/omg/**")
+//            exclude("org/w3c/**")
+//            exclude("org/xml/**")
+////        ("javax/sql/**")
+//        }
+//    }
+//}
+
+
+afterEvaluate{
+    tasks.withType<org.gradle.jvm.tasks.Jar>{
+        exclude("apple/**")
+        exclude("com/**")
+        exclude("java/**")
+        exclude("jdk/**")
+        exclude("sun/**")
+        exclude("org/ietf/**")
+        exclude("org/jcp/**")
+        exclude("org/omg/**")
+        exclude("org/w3c/**")
+        exclude("org/xml/**")
+//        include("javax/sql/**")
+        exclude { file ->
+            file.relativePath.pathString.contains("javax/") and !file.relativePath.pathString.contains("javax/sql")
+        }
+    }
+}
+
 
 kotlin.sourceSets.all { languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn") }
 val compileKotlin: KotlinCompile by tasks
