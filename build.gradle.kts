@@ -34,26 +34,6 @@ dependencies {
 
 }
 
-//sourceSets{
-//    main {
-//        java {
-//            exclude("apple/**")
-//            exclude("com/**")
-//            exclude("java/**")
-////        exclude("javax/**")
-//            exclude("/jdk/**")
-//            exclude("sun/**")
-//            exclude("org/ietf/**")
-//            exclude("org/jcp/**")
-//            exclude("org/omg/**")
-//            exclude("org/w3c/**")
-//            exclude("org/xml/**")
-////        ("javax/sql/**")
-//        }
-//    }
-//}
-
-
 afterEvaluate{
     tasks.withType<org.gradle.jvm.tasks.Jar>{
         exclude("apple/**")
@@ -66,9 +46,8 @@ afterEvaluate{
         exclude("org/omg/**")
         exclude("org/w3c/**")
         exclude("org/xml/**")
-//        include("javax/sql/**")
         exclude { file ->
-            file.relativePath.pathString.contains("javax/") and !file.relativePath.pathString.contains("javax/sql")
+            file.relativePath.contains("javax/") and !file.relativePath.contains("javax/sql")
         }
     }
 }

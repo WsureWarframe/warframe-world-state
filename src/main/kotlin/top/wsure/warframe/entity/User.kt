@@ -6,7 +6,7 @@ import org.ktorm.schema.long
 import org.ktorm.schema.varchar
 
 /**
- * Copyright (C), 上海维跃信息科技有限公司
+
  * FileName: User
  * Author:   wsure
  * Date:     2021/1/22 12:10 上午

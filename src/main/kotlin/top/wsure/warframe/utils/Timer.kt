@@ -3,7 +3,7 @@ package top.wsure.warframe.utils
 import java.util.*
 
 /**
- * Copyright (C), 上海维跃信息科技有限公司
+
  * FileName: Timer
  * Author:   wsure
  * Date:     2021/1/21 3:32 下午

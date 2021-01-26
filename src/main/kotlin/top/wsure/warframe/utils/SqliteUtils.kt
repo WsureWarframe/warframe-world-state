@@ -7,7 +7,7 @@ import java.sql.Statement
 
 
 /**
- * Copyright (C), 上海维跃信息科技有限公司
+
  * FileName: SqliteUtils
  * Author:   wsure
  * Date:     2021/1/21 5:10 下午
