@@ -17,17 +17,17 @@ class MessageUtils {
 
         private const val DB_KEY = "db"
 
-        fun getUrlByEnum(messageContent: String):String?{
+        fun getUrlByEnum(messageContent: String):Instruction?{
             val message = messageContent.trim()
             val worldStateKey = WorldStateKey.getByKeyWord(message)
             val beginWithKeyword = BeginWithKeyword.getByStartWith(message)
             return when {
-                worldStateKey != null -> "${NYMPH_HOST}/wf/robot/${worldStateKey.name}"
+                worldStateKey != null -> Instruction("wf",worldStateKey.name,"${NYMPH_HOST}/wf/robot/${worldStateKey.name}")
 
                 (beginWithKeyword != null )  -> {
                     val param = getParam(beginWithKeyword,message)
                     if(param != null)
-                        "${NYMPH_HOST}/${beginWithKeyword.name}/robot/${param}"
+                        Instruction(beginWithKeyword.name,param,"${NYMPH_HOST}/${beginWithKeyword.name}/robot/${param}")
                     else
                         null
                 }
@@ -53,4 +53,10 @@ class MessageUtils {
             return dbKey
         }
     }
+
+    data class Instruction(
+        val keyWord:String,
+        val param:String,
+        val url:String,
+    )
 }

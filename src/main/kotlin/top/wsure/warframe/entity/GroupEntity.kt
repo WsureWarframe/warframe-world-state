@@ -22,7 +22,7 @@ interface GroupEntity : Entity<GroupEntity> {
     var updateDate: LocalDateTime
 }
 
-object GroupTable :Table<GroupEntity>("GROUP") {
+object GroupTable :Table<GroupEntity>("QQ_GROUP") {
 
     var id = long("id").primaryKey().bindTo { it.id }
     var name = varchar("name").bindTo { it.name }
@@ -31,4 +31,4 @@ object GroupTable :Table<GroupEntity>("GROUP") {
     val createDate = datetime("create_date").bindTo { it.createDate }
     val updateDate = datetime("update_date").bindTo { it.updateDate }
 }
-val Database.group get() = this.sequenceOf(UserTable)
+val Database.group get() = this.sequenceOf(GroupTable)

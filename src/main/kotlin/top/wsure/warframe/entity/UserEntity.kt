@@ -16,15 +16,16 @@ import java.time.LocalDateTime
 
 interface UserEntity : Entity<UserEntity> {
     companion object : Entity.Factory<UserEntity>()
-    var id:Long
-    var nick:String
-    var remark:String
-    var avatarUrl:String
+
+    var id: Long
+    var nick: String
+    var remark: String
+    var avatarUrl: String
     var createDate: LocalDateTime
     var updateDate: LocalDateTime
 }
 
-object UserTable :Table<UserEntity>("USER") {
+object UserTable : Table<UserEntity>("USER") {
 
     var id = long("id").primaryKey().bindTo { it.id }
     var nick = varchar("nick").bindTo { it.nick }
@@ -33,4 +34,5 @@ object UserTable :Table<UserEntity>("USER") {
     val createDate = datetime("create_date").bindTo { it.createDate }
     val updateDate = datetime("update_date").bindTo { it.updateDate }
 }
+
 val Database.user get() = this.sequenceOf(UserTable)

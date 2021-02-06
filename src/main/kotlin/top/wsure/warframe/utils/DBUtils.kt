@@ -1,9 +1,9 @@
 package top.wsure.warframe.utils
 
 import org.ktorm.database.Database
+import org.ktorm.logging.ConsoleLogger
+import org.ktorm.logging.LogLevel
 import java.io.File
-import java.sql.Connection
-import java.sql.Statement
 
 
 /**
@@ -21,30 +21,45 @@ class DBUtils {
 
         fun getDatabase(file: File):Database{
             val url = "jdbc:h2:file:${file.absolutePath};AUTO_SERVER=TRUE"
-            return Database.connect(url, driver, username, password)
+            return Database.connect(url = url,
+                driver = driver,
+                user = username,
+                password = password,
+                logger = ConsoleLogger(threshold = LogLevel.DEBUG)
+            )
         }
 
         fun initTableIfNotExist(database: Database) {
 
             database.useConnection { conn ->
-                val createUserSql = "create table if not exists user(\n" +
+                val createTablesSql = "create table if not exists user(\n" +
                         "    id BIGINT(20) primary key NOT NULL ,\n" +
                         "    nick TEXT DEFAULT NULL,\n" +
                         "    remark TEXT DEFAULT NULL,\n" +
                         "    avatar_url TEXT DEFAULT NULL,\n" +
                         "    create_date DATETIME DEFAULT NULL,\n" +
                         "    update_date DATETIME DEFAULT NULL\n" +
-                        ")"
-
-                val createGroupSql = "create table if not exists user(\n" +
+                        ");" +
+                        "create table if not exists qq_group(\n" +
                         "    id BIGINT(20) primary key NOT NULL ,\n" +
                         "    name TEXT DEFAULT NULL,\n" +
                         "    remark TEXT DEFAULT NULL,\n" +
                         "    avatar_url TEXT DEFAULT NULL,\n" +
                         "    create_date DATETIME DEFAULT NULL,\n" +
                         "    update_date DATETIME DEFAULT NULL\n" +
-                        ")"
-                conn.prepareStatement(createUserSql).execute()
+                        ");" +
+                        "create table if not exists search_record(\n" +
+                        "    user_id BIGINT(20) NOT NULL ,\n" +
+                        "    group_id BIGINT(20) DEFAULT NULL ,\n" +
+                        "    nick TEXT DEFAULT NULL,\n" +
+                        "    key_word TEXT DEFAULT NULL,\n" +
+                        "    param TEXT DEFAULT NULL,\n" +
+                        "    url TEXT DEFAULT NULL,\n" +
+                        "    create_date DATETIME DEFAULT NULL,\n" +
+                        "    update_date DATETIME DEFAULT NULL\n" +
+                        ");"
+                conn.prepareStatement(createTablesSql).execute()
+                conn.commit()
             }
         }
 
