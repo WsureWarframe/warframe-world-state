@@ -7,16 +7,16 @@ import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.event.globalEventChannel
-import org.ktorm.dsl.forEach
-import org.ktorm.dsl.from
-import org.ktorm.dsl.insert
-import org.ktorm.dsl.select
-import top.wsure.warframe.entity.User
+import org.ktorm.database.Database
 import top.wsure.warframe.enums.BeginWithKeyword
+import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
+import top.wsure.warframe.dao.UserDao
+import top.wsure.warframe.service.SaveDataService
+import top.wsure.warframe.service.StatisticalService
 import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
-import top.wsure.warframe.utils.SqliteUtils
+import top.wsure.warframe.utils.DBUtils
 import java.io.File
 
 object WorldState : KotlinPlugin(
@@ -30,6 +30,7 @@ object WorldState : KotlinPlugin(
 ) {
 
     private const val HELP_KEY = "help"
+    lateinit var globalDatabase:Database
 
 
 
@@ -41,22 +42,30 @@ object WorldState : KotlinPlugin(
         logger.info{"os.version:${System.getProperty("os.version")}"}
 
         super.onEnable()
-
+        //加载数据库
+        initDatabase()
+        
         logger.info("Plugin loaded!")
         globalEventChannel().subscribeAlways<MessageEvent> { event ->
             val messageContent = event.message.contentToString()
-            val host = MessageUtils.getUrlByEnum(messageContent)
+            val instruction = MessageUtils.getUrlByEnum(messageContent)
+            val host = instruction?.url
             if (host != null) {
-                val response = OkHttpUtils.doGet(host)
                 logger.info { "${event.senderName} 查询 $host" }
-                val u = event.sender
-                u.nick
-                u.remark
-                u.avatarUrl
-                u.id
+                var response:String? = null
+                try {
+                    response = OkHttpUtils.doGet(host)
+                }catch (e:Exception){
+                    logger.error(e)
+                }
+
                 if (response != null) {
                     event.subject.sendMessage(PlainText(response))
+                } else {
+                    event.subject.sendMessage(PlainText("暂时无法查询，请访问\n$host"))
                 }
+                SaveDataService.storage(event.sender,instruction)
+
             }
 
             if (messageContent == HELP_KEY) {
@@ -65,32 +74,23 @@ object WorldState : KotlinPlugin(
                     .append(PlainText(BeginWithKeyword.getHelpMenu()))
                     .append(PlainText("\n"))
                     .append(PlainText(WorldStateKey.getHelpMenu()))
+                    .append(PlainText("\n"))
+                    .append(PlainText(DatabaseKey.getHelpMenu()))
                     .build()
                 event.subject.sendMessage(messageChain)
+            }
+            val dbKey = MessageUtils.getDatabaseEnum(messageContent)
+            if (dbKey != null){
+                when(dbKey) {
+                    DatabaseKey.USER_LIST -> UserDao.userList(event)
+                    DatabaseKey.KEY_TOP -> StatisticalService.queryKeyTop(event)
+                }
             }
 
         }
 
         globalEventChannel().subscribeAlways<MessageRecallEvent> { event ->
             logger.info { "${event.authorId} 的消息被撤回了" }
-        }
-        val file:File = resolveDataFile("test")
-
-        try {
-            val initDatabase = SqliteUtils.getDatabase(file)
-            SqliteUtils.initTableIfNotExist(initDatabase)
-            initDatabase.from(User)
-                .select(User.columns)
-                .forEach { row -> logger.info("user id:${row[User.id]} , nick:${row[User.nick]}") }
-            initDatabase.insert(User){
-                set(it.id,929834382)
-                set(it.nick,"an user")
-            }
-            initDatabase.from(User)
-                .select(User.columns)
-                .forEach { row -> logger.info("user id:${row[User.id]} , nick:${row[User.nick]}") }
-        }catch (e:Exception){
-            logger.error(e.stackTraceToString())
         }
 
     }
@@ -101,5 +101,11 @@ object WorldState : KotlinPlugin(
     override fun onDisable() {
         logger.info { "Plugin unloaded" }
 
+    }
+
+    private fun initDatabase(){
+        val file: File = resolveDataFile("test")
+        globalDatabase = DBUtils.getDatabase(file)
+        DBUtils.initTableIfNotExist(globalDatabase)
     }
 }

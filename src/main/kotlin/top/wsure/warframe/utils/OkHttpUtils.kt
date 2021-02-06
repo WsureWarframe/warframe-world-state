@@ -2,6 +2,7 @@ package top.wsure.warframe.utils
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 /**
@@ -21,7 +22,17 @@ class OkHttpUtils {
                 .build()
             val call = client.newCall(request)
             val response = call.execute()
-            return response.body?.string();
+            return response.body?.string()
+        }
+
+        fun getImage(url:String): InputStream {
+            val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+            val call = client.newCall(request)
+            val response = call.execute()
+            return response.body?.byteStream()!!
         }
     }
 

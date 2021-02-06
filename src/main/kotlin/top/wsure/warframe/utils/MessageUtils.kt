@@ -2,6 +2,7 @@ package top.wsure.warframe.utils
 
 import net.mamoe.mirai.message.data.MessageContent
 import top.wsure.warframe.enums.BeginWithKeyword
+import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
 
 /**
@@ -13,6 +14,9 @@ import top.wsure.warframe.enums.WorldStateKey
 class MessageUtils {
     companion object {
         private const val NYMPH_HOST = "http://nymph.rbq.life:3000"
+
+        private const val DB_KEY = "db"
+
         fun getUrlByEnum(messageContent: String):String?{
             val message = messageContent.trim()
             val worldStateKey = WorldStateKey.getByKeyWord(message)
@@ -38,6 +42,15 @@ class MessageUtils {
                 param.isBlank() -> null
                 else -> param
             }
+        }
+
+        fun getDatabaseEnum(message:String):DatabaseKey?{
+            var dbKey:DatabaseKey? = null
+            if (message.startsWith("$DB_KEY ")){
+                val keyword = message.removePrefix("$DB_KEY ").trim()
+                dbKey = DatabaseKey.getByKeyWord(keyword)
+            }
+            return dbKey
         }
     }
 }

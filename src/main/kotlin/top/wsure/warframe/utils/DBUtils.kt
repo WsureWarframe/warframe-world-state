@@ -13,15 +13,14 @@ import java.sql.Statement
  * Date:     2021/1/21 5:10 下午
  * Description:
  */
-class SqliteUtils {
+class DBUtils {
     companion object {
-        private val username:String = "Wsure"
-        private val password:String = "Wsure"
-        private val driver = "org.h2.Driver"
+        private const val username:String = "Wsure"
+        private const val password:String = "Wsure"
+        private const val driver = "org.h2.Driver"
 
         fun getDatabase(file: File):Database{
-            val url = "jdbc:h2:file:${file.absolutePath}"
-            Class.forName(driver)
+            val url = "jdbc:h2:file:${file.absolutePath};AUTO_SERVER=TRUE"
             return Database.connect(url, driver, username, password)
         }
 
@@ -31,6 +30,15 @@ class SqliteUtils {
                 val createUserSql = "create table if not exists user(\n" +
                         "    id BIGINT(20) primary key NOT NULL ,\n" +
                         "    nick TEXT DEFAULT NULL,\n" +
+                        "    remark TEXT DEFAULT NULL,\n" +
+                        "    avatar_url TEXT DEFAULT NULL,\n" +
+                        "    create_date DATETIME DEFAULT NULL,\n" +
+                        "    update_date DATETIME DEFAULT NULL\n" +
+                        ")"
+
+                val createGroupSql = "create table if not exists user(\n" +
+                        "    id BIGINT(20) primary key NOT NULL ,\n" +
+                        "    name TEXT DEFAULT NULL,\n" +
                         "    remark TEXT DEFAULT NULL,\n" +
                         "    avatar_url TEXT DEFAULT NULL,\n" +
                         "    create_date DATETIME DEFAULT NULL,\n" +

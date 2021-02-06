@@ -30,6 +30,8 @@ dependencies {
 
     implementation("org.ktorm:ktorm-core:3.3.0")
 
+    implementation("org.ktorm:ktorm-support-mysql:3.3.0")
+
     implementation(files("${System.getProperty("java.home")}/lib/rt.jar"))
 
 }

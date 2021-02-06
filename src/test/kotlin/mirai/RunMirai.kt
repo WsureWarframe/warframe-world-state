@@ -9,6 +9,7 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import top.wsure.warframe.WorldState
 
 
+@ConsoleExperimentalApi
 suspend fun main() {
     MiraiConsoleTerminalLoader.startAsDaemon()
     WorldState.load()
