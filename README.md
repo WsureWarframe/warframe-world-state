@@ -59,3 +59,7 @@
         电波
         仲裁
         舰队
+# 开发记录：MiraiAndroid兼容踩坑
+0.插件特点: 这是一个全平台Mirai兼容的插件，集成了h2作为db，如果你也在寻找兼容MiraiAndroid的数据库集成方案，我向你推荐h2+ktorm
+1.失败经验：mybatisPlus、mybatis、sqlite jdbc在MiraiAndroid上无法运行(扫包路径问题、MiraiAndroid内二次打包文件过滤问题、安卓so文件加载问题)。jdk自带的rj.jar在Android上没有，具体表现为javax.包不存在，解决方法：查看kts文件，手动打进去，把多余的路径排掉
+2.成功经验：数据库方案选型：h2 jdbc+ktorm 或 原生jdbc
