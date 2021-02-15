@@ -1,4 +1,5 @@
 # warframe-world-state
+## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，现在已经转战Mirai
 ### 兼容Mirai-Console 
     最新:
     Mirai-Console 2.0.0 ->  0.0.3 
