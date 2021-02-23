@@ -11,3 +11,5 @@ config/
 logs/
 
 data/
+
+device.json
