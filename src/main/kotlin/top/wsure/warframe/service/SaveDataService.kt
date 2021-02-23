@@ -20,7 +20,7 @@ object SaveDataService {
         UserDao.insertUser(user)
         val record = SearchRecordDao.getSearchRecordEntity(user, instruction)
         if (user is Member) {
-            val group: Group = (user as Member).group
+            val group: Group = user.group
             record.groupId = group.id
             GroupDao.insertGroup(group)
         }

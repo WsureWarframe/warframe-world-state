@@ -1,0 +1,53 @@
+plugins {
+    id("net.mamoe.mirai-console") version "2.0-RC" // mirai-console version
+    id 'org.jetbrains.kotlin.jvm' version "1.4.21"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "1.4.21"
+}
+
+mirai {
+    coreVersion = "2.0-RC" // mirai-core version
+}
+
+group = "top.wsure.warframe"
+version = "0.0.4"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url = "https://dl.bintray.com/kotlin/kotlin-eap" }
+}
+
+dependencies {
+
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+    implementation "com.h2database:h2:1.4.200"
+
+    implementation "org.ktorm:ktorm-core:3.3.0"
+
+    implementation("org.ktorm:ktorm-support-mysql:3.3.0")
+
+    implementation files("$buildDir/libs")
+
+}
+
+
+task rtJar(type: Jar) {
+    dependsOn(build)
+    baseName 'rt'
+    from zipTree("${System.getProperty('java.home')}/lib/rt.jar").matching {
+        include 'javax/sql/*'
+    }
+    include '**/*'
+}
+tasks.whenTaskAdded { task ->
+    if (task.name == 'buildPlugin') {
+        task.dependsOn rtJar
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
