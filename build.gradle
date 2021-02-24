@@ -28,14 +28,13 @@ dependencies {
 
     implementation("org.ktorm:ktorm-support-mysql:3.3.0")
 
-    implementation files("$buildDir/libs")
+    implementation files("$buildDir/libs/rt.jar")
 
 }
 
 
 task rtJar(type: Jar) {
-    dependsOn(build)
-    baseName 'rt'
+    archiveName 'rt.jar'
     from zipTree("${System.getProperty('java.home')}/lib/rt.jar").matching {
         include 'javax/sql/*'
     }
