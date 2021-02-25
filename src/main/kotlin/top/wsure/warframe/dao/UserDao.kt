@@ -29,16 +29,16 @@ import java.time.LocalDateTime
  */
 object UserDao {
     fun insertUser(user: User) {
-        try {
+//        try {
             val exist = globalDatabase.user.find { it.id eq user.id }
             if (exist == null) {
                 globalDatabase.user.add(getUserEntity(user))
             } else {
                 updateUserEntity(user, exist).flushChanges()
             }
-        } catch (e: Exception) {
-            WorldState.logger.error(e.stackTraceToString())
-        }
+//        } catch (e: Exception) {
+//            WorldState.logger.warning(e.message,e)
+//        }
     }
 
     suspend fun userList(event: MessageEvent) {

@@ -18,6 +18,11 @@ import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
 import top.wsure.warframe.utils.DBUtils
 import java.io.File
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.FutureTask
+import kotlin.concurrent.thread
 
 object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
@@ -30,8 +35,9 @@ object WorldState : KotlinPlugin(
 ) {
 
     private const val HELP_KEY = "help"
+    private const val DB_NAME = "test"
+    private val DB_FILE = resolveDataFile(DB_NAME)
     lateinit var globalDatabase:Database
-
 
 
     override fun onEnable() {
@@ -43,55 +49,59 @@ object WorldState : KotlinPlugin(
 
         super.onEnable()
         //加载数据库
-        initDatabase()
-        
-        logger.info("Plugin loaded!")
-        globalEventChannel().subscribeAlways<MessageEvent> { event ->
-            val messageContent = event.message.contentToString()
-            val instruction = MessageUtils.getUrlByEnum(messageContent)
-            val host = instruction?.url
-            if (host != null) {
-                logger.info { "${event.senderName} 查询 $host" }
-                var response:String? = null
-                try {
-                    response = OkHttpUtils.doGet(host)
-                }catch (e:Exception){
-                    logger.error(e)
+        Thread {
+            initDatabase()
+
+            logger.info("Plugin loaded!")
+            globalEventChannel().subscribeAlways<MessageEvent> { event ->
+                val messageContent = event.message.contentToString()
+                val instruction = MessageUtils.getUrlByEnum(messageContent)
+                val host = instruction?.url
+                if (host != null) {
+                    logger.info { "${event.senderName} 查询 $host" }
+                    var response:String? = null
+                    try {
+                        response = OkHttpUtils.doGet(host)
+                    }catch (e:Exception){
+                        logger.error(e)
+                    }
+
+                    if (response != null) {
+                        event.subject.sendMessage(PlainText(response))
+                    } else {
+                        event.subject.sendMessage(PlainText("暂时无法查询，请访问\n$host"))
+                    }
+                    SaveDataService.storage(event.sender,instruction)
+
                 }
 
-                if (response != null) {
-                    event.subject.sendMessage(PlainText(response))
-                } else {
-                    event.subject.sendMessage(PlainText("暂时无法查询，请访问\n$host"))
+                if (messageContent == HELP_KEY) {
+                    val messageChain = MessageChainBuilder()
+                            .append(PlainText("warframe-world-state插件功能如下\n"))
+                            .append(PlainText(BeginWithKeyword.getHelpMenu()))
+                            .append(PlainText("\n"))
+                            .append(PlainText(WorldStateKey.getHelpMenu()))
+                            .append(PlainText("\n"))
+                            .append(PlainText(DatabaseKey.getHelpMenu()))
+                            .build()
+                    event.subject.sendMessage(messageChain)
                 }
-                SaveDataService.storage(event.sender,instruction)
+                val dbKey = MessageUtils.getDatabaseEnum(messageContent)
+                if (dbKey != null){
+                    when(dbKey) {
+                        DatabaseKey.USER_LIST -> UserDao.userList(event)
+                        DatabaseKey.KEY_TOP -> StatisticalService.queryKeyTop(event)
+                    }
+                }
 
             }
 
-            if (messageContent == HELP_KEY) {
-                val messageChain = MessageChainBuilder()
-                    .append(PlainText("warframe-world-state插件功能如下\n"))
-                    .append(PlainText(BeginWithKeyword.getHelpMenu()))
-                    .append(PlainText("\n"))
-                    .append(PlainText(WorldStateKey.getHelpMenu()))
-                    .append(PlainText("\n"))
-                    .append(PlainText(DatabaseKey.getHelpMenu()))
-                    .build()
-                event.subject.sendMessage(messageChain)
+            globalEventChannel().subscribeAlways<MessageRecallEvent> { event ->
+                logger.info { "${event.authorId} 的消息被撤回了" }
             }
-            val dbKey = MessageUtils.getDatabaseEnum(messageContent)
-            if (dbKey != null){
-                when(dbKey) {
-                    DatabaseKey.USER_LIST -> UserDao.userList(event)
-                    DatabaseKey.KEY_TOP -> StatisticalService.queryKeyTop(event)
-                }
-            }
+        }.start()
+//        initDatabase()
 
-        }
-
-        globalEventChannel().subscribeAlways<MessageRecallEvent> { event ->
-            logger.info { "${event.authorId} 的消息被撤回了" }
-        }
 
     }
 
@@ -104,8 +114,8 @@ object WorldState : KotlinPlugin(
     }
 
     private fun initDatabase(){
-        val file: File = resolveDataFile("test")
-        globalDatabase = DBUtils.getDatabase(file)
+//        val file: File = resolveDataFile("test")
+        globalDatabase = DBUtils.getDatabase(DB_FILE)
         DBUtils.initTableIfNotExist(globalDatabase)
     }
 }

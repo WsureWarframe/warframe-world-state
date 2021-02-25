@@ -17,16 +17,16 @@ import java.time.LocalDateTime
  */
 object GroupDao {
     fun insertGroup(group:Group){
-        try {
+//        try {
             val exist = WorldState.globalDatabase.group.find { it.id eq group.id}
             if(exist == null){
                 WorldState.globalDatabase.group.add(getGroupEntity(group))
             } else {
                 updateGroupEntity(group, exist).flushChanges()
             }
-        }catch (e:Exception){
-            WorldState.logger.error(e.stackTraceToString())
-        }
+//        }catch (e:Exception){
+//            WorldState.logger.warning(e.message,e)
+//        }
     }
 
     private fun updateGroupEntity(group: Group, exist: GroupEntity): GroupEntity {

@@ -28,23 +28,24 @@ dependencies {
 
     implementation("org.ktorm:ktorm-support-mysql:3.3.0")
 
-    implementation files("$buildDir/libs/rt.jar")
+//    implementation fileTree(dir:  "$buildDir/libs" ,includes: ["rt.*"])
+    implementation files("${System.getProperty('java.home')}/lib/rt.jar")
 
 }
 
 
-task rtJar(type: Jar) {
-    archiveName 'rt.jar'
-    from zipTree("${System.getProperty('java.home')}/lib/rt.jar").matching {
-        include 'javax/sql/*'
-    }
-    include '**/*'
-}
-tasks.whenTaskAdded { task ->
-    if (task.name == 'buildPlugin') {
-        task.dependsOn rtJar
-    }
-}
+//task rtJar(type: Jar) {
+//    archiveName 'rt.jar'
+//    from zipTree("${System.getProperty('java.home')}/lib/rt.jar").matching {
+//        include 'javax/sql/*'
+//    }
+//    include '**/*'
+//}
+//tasks.whenTaskAdded { task ->
+//    if (task.name == 'buildPlugin') {
+//        task.dependsOn rtJar
+//    }
+//}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
