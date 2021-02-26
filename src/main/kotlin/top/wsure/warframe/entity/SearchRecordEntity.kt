@@ -1,13 +1,10 @@
 package top.wsure.warframe.entity
 
-import org.ktorm.database.Database
-import org.ktorm.entity.Entity
-import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.Table
-import org.ktorm.schema.datetime
-import org.ktorm.schema.long
-import org.ktorm.schema.varchar
-import java.time.LocalDateTime
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.jodatime.datetime
 
 /**
  * FileName: SearchRecordEntity
@@ -15,29 +12,27 @@ import java.time.LocalDateTime
  * Date:     2021/2/5 5:51 下午
  * Description:
  */
-interface SearchRecordEntity : Entity<SearchRecordEntity> {
-    companion object : Entity.Factory<SearchRecordEntity>()
+class SearchRecordEntity(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<SearchRecordEntity>(SearchRecordTable)
 
-    var userId: Long
-    var groupId: Long
-    var nick: String
-    var keyWord: String
-    var param: String
-    var url: String
-    var createDate: LocalDateTime
-    var updateDate: LocalDateTime
+    var userId by SearchRecordTable.userId
+    var groupId by SearchRecordTable.groupId
+    var nick by SearchRecordTable.nick
+    var keyWord by SearchRecordTable.keyWord
+    var param by SearchRecordTable.param
+    var url by SearchRecordTable.url
+    var createDate by SearchRecordTable.createDate
+    var updateDate by SearchRecordTable.updateDate
 }
 
-object SearchRecordTable : Table<SearchRecordEntity>("SEARCH_RECORD") {
+object SearchRecordTable : LongIdTable("SEARCH_RECORD") {
 
-    var userId = long("user_id").bindTo { it.userId }
-    var groupId = long("group_id").bindTo { it.groupId }
-    var nick = varchar("nick").bindTo { it.nick }
-    var keyWord = varchar("key_word").bindTo { it.keyWord }
-    var param = varchar("param").bindTo { it.param }
-    var url = varchar("url").bindTo { it.url }
-    val createDate = datetime("create_date").bindTo { it.createDate }
-    val updateDate = datetime("update_date").bindTo { it.updateDate }
+    var userId = long("user_id")
+    var groupId = long("group_id").nullable()
+    var nick = text("nick").nullable()
+    var keyWord = text("key_word").nullable()
+    var param = text("param").nullable()
+    var url = text("url").nullable()
+    val createDate = datetime("create_date")
+    val updateDate = datetime("update_date")
 }
-
-val Database.searchRecord get() = this.sequenceOf(SearchRecordTable)

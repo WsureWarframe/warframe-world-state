@@ -1,12 +1,10 @@
 package top.wsure.warframe.dao
 
 import net.mamoe.mirai.contact.User
-import org.ktorm.entity.add
+import org.joda.time.DateTime
 import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.SearchRecordEntity
-import top.wsure.warframe.entity.searchRecord
 import top.wsure.warframe.utils.MessageUtils
-import java.time.LocalDateTime
 
 /**
  * FileName: SearchRecordDao
@@ -16,19 +14,15 @@ import java.time.LocalDateTime
  */
 object SearchRecordDao {
 
-    fun insertRecord(record:SearchRecordEntity){
-        WorldState.globalDatabase.searchRecord.add(record)
-    }
-
-    fun getSearchRecordEntity(user: User, instruction: MessageUtils.Instruction):SearchRecordEntity{
-        return SearchRecordEntity {
+    fun insert(user: User, instruction: MessageUtils.Instruction):SearchRecordEntity{
+        return SearchRecordEntity.new {
             userId = user.id
             nick = user.nick
             keyWord = instruction.keyWord
             param = instruction.param
             url = instruction.url
-            createDate = LocalDateTime.now()
-            updateDate = LocalDateTime.now()
+            createDate = DateTime.now()
+            updateDate = DateTime.now()
         }
     }
 }

@@ -7,7 +7,7 @@ import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.event.globalEventChannel
-import org.ktorm.database.Database
+import org.jetbrains.exposed.sql.Database
 import top.wsure.warframe.enums.BeginWithKeyword
 import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
@@ -17,12 +17,6 @@ import top.wsure.warframe.service.StatisticalService
 import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
 import top.wsure.warframe.utils.DBUtils
-import java.io.File
-import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.FutureTask
-import kotlin.concurrent.thread
 
 object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
@@ -37,7 +31,7 @@ object WorldState : KotlinPlugin(
     private const val HELP_KEY = "help"
     private const val DB_NAME = "test"
     private val DB_FILE = resolveDataFile(DB_NAME)
-    lateinit var globalDatabase:Database
+    lateinit var globalDatabase: Database
 
 
     override fun onEnable() {
@@ -100,8 +94,6 @@ object WorldState : KotlinPlugin(
                 logger.info { "${event.authorId} 的消息被撤回了" }
             }
         }.start()
-//        initDatabase()
-
 
     }
 
@@ -114,7 +106,6 @@ object WorldState : KotlinPlugin(
     }
 
     private fun initDatabase(){
-//        val file: File = resolveDataFile("test")
         globalDatabase = DBUtils.getDatabase(DB_FILE)
         DBUtils.initTableIfNotExist(globalDatabase)
     }

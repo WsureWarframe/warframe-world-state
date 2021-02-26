@@ -1,10 +1,10 @@
 package top.wsure.warframe.entity
 
-import org.ktorm.database.Database
-import org.ktorm.entity.Entity
-import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.*
-import java.time.LocalDateTime
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.jodatime.datetime
 
 /**
  * FileName: GroupEntity
@@ -12,23 +12,19 @@ import java.time.LocalDateTime
  * Date:     2021/1/29 11:30 上午
  * Description:
  */
-interface GroupEntity : Entity<GroupEntity> {
-    companion object : Entity.Factory<GroupEntity>()
-    var id:Long
-    var name:String
-    var remark:String
-    var avatarUrl:String
-    var createDate: LocalDateTime
-    var updateDate: LocalDateTime
+class GroupEntity(id:EntityID<Long>) :LongEntity(id) {
+    companion object : LongEntityClass<GroupEntity>(GroupTable)
+    var name by GroupTable.name
+    var remark by GroupTable.remark
+    var avatarUrl by GroupTable.avatarUrl
+    var createDate by GroupTable.createDate
+    var updateDate by GroupTable.updateDate
 }
 
-object GroupTable :Table<GroupEntity>("QQ_GROUP") {
-
-    var id = long("id").primaryKey().bindTo { it.id }
-    var name = varchar("name").bindTo { it.name }
-    var remark = varchar("remark").bindTo { it.remark }
-    var avatarUrl = varchar("avatar_url").bindTo { it.avatarUrl }
-    val createDate = datetime("create_date").bindTo { it.createDate }
-    val updateDate = datetime("update_date").bindTo { it.updateDate }
+object GroupTable :LongIdTable("QQ_GROUP") {
+    var name = text("name").nullable()
+    var remark = text("remark").nullable()
+    var avatarUrl = text("avatar_url").nullable()
+    val createDate = datetime("create_date")
+    val updateDate = datetime("update_date")
 }
-val Database.group get() = this.sequenceOf(GroupTable)

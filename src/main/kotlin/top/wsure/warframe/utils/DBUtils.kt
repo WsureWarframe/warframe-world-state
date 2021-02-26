@@ -1,8 +1,9 @@
 package top.wsure.warframe.utils
 
-import org.ktorm.database.Database
-import org.ktorm.logging.ConsoleLogger
-import org.ktorm.logging.LogLevel
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
 
@@ -24,14 +25,10 @@ class DBUtils {
             return Database.connect(url = url,
                 driver = driver,
                 user = username,
-                password = password,
-                logger = ConsoleLogger(threshold = LogLevel.DEBUG)
-            )
+                password = password)
         }
 
-        fun initTableIfNotExist(database: Database) {
-
-            database.useConnection { conn ->
+        fun initTableIfNotExist(db:Database) {
                 val createTablesSql = "create table if not exists user(\n" +
                         "    id BIGINT(20) primary key NOT NULL ,\n" +
                         "    nick TEXT DEFAULT NULL,\n" +
@@ -58,8 +55,9 @@ class DBUtils {
                         "    create_date DATETIME DEFAULT NULL,\n" +
                         "    update_date DATETIME DEFAULT NULL\n" +
                         ");"
-                conn.prepareStatement(createTablesSql).execute()
-                conn.commit()
+            transaction(db) {
+                addLogger(StdOutSqlLogger)
+                exec(createTablesSql)
             }
         }
 

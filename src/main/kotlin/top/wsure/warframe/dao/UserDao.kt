@@ -1,25 +1,15 @@
 package top.wsure.warframe.dao
 
-import net.mamoe.mirai.console.command.CommandSender.Companion.asMemberCommandSender
-import net.mamoe.mirai.contact.Contact.Companion.uploadImage
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.event.events.MessageEvent
-import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
-import org.ktorm.dsl.*
-import org.ktorm.entity.add
-import org.ktorm.entity.filter
-import org.ktorm.entity.find
-import org.ktorm.entity.toList
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 import top.wsure.warframe.WorldState
-import top.wsure.warframe.WorldState.globalDatabase
-import top.wsure.warframe.WorldState.logger
 import top.wsure.warframe.entity.UserEntity
-import top.wsure.warframe.entity.user
-import top.wsure.warframe.utils.OkHttpUtils
-import java.time.LocalDateTime
+import top.wsure.warframe.entity.UserTable
 
 /**
  * FileName: UserService
@@ -28,32 +18,21 @@ import java.time.LocalDateTime
  * Description:
  */
 object UserDao {
-    fun insertUser(user: User) {
-//        try {
-            val exist = globalDatabase.user.find { it.id eq user.id }
-            if (exist == null) {
-                globalDatabase.user.add(getUserEntity(user))
-            } else {
-                updateUserEntity(user, exist).flushChanges()
-            }
-//        } catch (e: Exception) {
-//            WorldState.logger.warning(e.message,e)
-//        }
+    fun saveUser(user: User) {
+        val exist = UserEntity.findById(user.id)
+        if (exist == null) {
+            insert(user)
+        } else {
+            updateUserEntity(user, exist)
+        }
     }
 
     suspend fun userList(event: MessageEvent) {
         val user = event.sender
         event.subject.sendMessage(MessageChainBuilder()
             .append(PlainText("用户列表\n"))
-            .append(PlainText(globalDatabase.user
-                .filter { it ->
-                    if (user is Member)
-                        it.id.inList(user.group.members.map { it.id })
-                    else
-                        it.id.isNotNull()
-                }
-                .toList()
-                .joinToString("\n") { "[${it.id}]: ${it.nick}" }
+            .append(PlainText(
+                users(user).joinToString("\n") { "[${it.id.value}]: ${it.nick}" }
             ))
             .build()
         )
@@ -66,24 +45,36 @@ object UserDao {
             }
          */
     }
+    private fun users(user: User):List<UserEntity>{
+        var userList = emptyList<UserEntity>()
+        transaction(WorldState.globalDatabase) {
+            userList =  UserEntity.find {
+                if (user is Member)
+                    UserTable.id.inList(user.group.members.map { it.id })
+                else
+                    UserTable.id.isNotNull()
+            }
+                .toList()
+        }
+        return userList
+    }
 
-
-    private fun getUserEntity(user: User): UserEntity {
-        return UserEntity {
-            id = user.id
+    private fun insert(user: User): UserEntity {
+        return UserEntity.new(user.id) {
             nick = user.nick
             remark = user.remark
             avatarUrl = user.avatarUrl
-            createDate = LocalDateTime.now()
-            updateDate = LocalDateTime.now()
+            createDate = DateTime.now()
+            updateDate = DateTime.now()
         }
     }
 
     private fun updateUserEntity(user: User, exist: UserEntity): UserEntity {
+
         exist.nick = user.nick
         exist.remark = user.remark
         exist.avatarUrl = user.avatarUrl
-        exist.updateDate = LocalDateTime.now()
+        exist.updateDate = DateTime.now()
         return exist
     }
 

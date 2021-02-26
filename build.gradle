@@ -19,34 +19,21 @@ repositories {
 }
 
 dependencies {
+    def exposedVersion = "0.29.1"
 
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
     implementation "com.h2database:h2:1.4.200"
 
-    implementation "org.ktorm:ktorm-core:3.3.0"
+    implementation "org.jetbrains.exposed:exposed-core:$exposedVersion"
 
-    implementation("org.ktorm:ktorm-support-mysql:3.3.0")
+    implementation "org.jetbrains.exposed:exposed-dao:$exposedVersion"
 
-//    implementation fileTree(dir:  "$buildDir/libs" ,includes: ["rt.*"])
-    implementation files("${System.getProperty('java.home')}/lib/rt.jar")
+    implementation "org.jetbrains.exposed:exposed-jdbc:$exposedVersion"
+
+    implementation "org.jetbrains.exposed:exposed-jodatime:$exposedVersion"
 
 }
-
-
-//task rtJar(type: Jar) {
-//    archiveName 'rt.jar'
-//    from zipTree("${System.getProperty('java.home')}/lib/rt.jar").matching {
-//        include 'javax/sql/*'
-//    }
-//    include '**/*'
-//}
-//tasks.whenTaskAdded { task ->
-//    if (task.name == 'buildPlugin') {
-//        task.dependsOn rtJar
-//    }
-//}
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

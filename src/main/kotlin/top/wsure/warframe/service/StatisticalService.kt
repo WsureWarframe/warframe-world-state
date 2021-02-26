@@ -3,7 +3,8 @@ package top.wsure.warframe.service
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
-import org.ktorm.dsl.*
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.SearchRecordTable
 import top.wsure.warframe.enums.DatabaseKey
@@ -34,33 +35,34 @@ object StatisticalService {
     }
 
     fun queryTopSearch(groupId: Long?, start: LocalDateTime?, end: LocalDateTime?): List<TopSearchBo> {
-        val query = WorldState.globalDatabase
-            .from(SearchRecordTable)
-            .select(SearchRecordTable.keyWord, SearchRecordTable.param, count().aliased(COUNT_COLUMN))
-            .whereWithConditions {
-                if (groupId != null) {
-                    it += SearchRecordTable.groupId eq groupId
-                }
-                if (start != null && end != null) {
-                    it += SearchRecordTable.createDate between start..end
-                }
-            }
-            .groupBy(SearchRecordTable.keyWord, SearchRecordTable.param)
-            .orderBy(count().desc())
-            .limit(0,5)
+        var searchList = emptyList<TopSearchBo>()
+        transaction {
+            val query = SearchRecordTable
+                .slice(SearchRecordTable.keyWord, SearchRecordTable.param, SearchRecordTable.id.count().alias(COUNT_COLUMN))
+                .selectAll()
+                .groupBy(SearchRecordTable.keyWord, SearchRecordTable.param)
+                .orderBy( SearchRecordTable.id.count() to SortOrder.DESC)
+                .limit(0,5)
 
-        return query.map {
-            TopSearchBo(
-                it[SearchRecordTable.keyWord],
-                it[SearchRecordTable.param],
-                it.getInt(COUNT_COLUMN)
-            )
+            if (groupId != null)
+                query.andWhere {  SearchRecordTable.groupId eq groupId }
+            if (start != null && end != null)
+                query.andWhere { SearchRecordTable.createDate.between(start,end) }
+
+            searchList =  query.map {
+                TopSearchBo(
+                    it[SearchRecordTable.keyWord],
+                    it[SearchRecordTable.param],
+                    it[SearchRecordTable.id.count().alias(COUNT_COLUMN)]
+                )
+            }
         }
+        return searchList
     }
 
     data class TopSearchBo(
         val keyWord: String?,
         val param: String?,
-        val count: Int
+        val count: Long
     )
 }
