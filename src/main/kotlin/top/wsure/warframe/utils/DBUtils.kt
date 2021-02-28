@@ -1,9 +1,11 @@
 package top.wsure.warframe.utils
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
+import top.wsure.warframe.entity.UserTable
 import java.io.File
 
 
@@ -36,7 +38,7 @@ class DBUtils {
                         "    avatar_url TEXT DEFAULT NULL,\n" +
                         "    create_date DATETIME DEFAULT NULL,\n" +
                         "    update_date DATETIME DEFAULT NULL\n" +
-                        ");" +
+                        ");\n" +
                         "create table if not exists qq_group(\n" +
                         "    id BIGINT(20) primary key NOT NULL ,\n" +
                         "    name TEXT DEFAULT NULL,\n" +
@@ -44,8 +46,9 @@ class DBUtils {
                         "    avatar_url TEXT DEFAULT NULL,\n" +
                         "    create_date DATETIME DEFAULT NULL,\n" +
                         "    update_date DATETIME DEFAULT NULL\n" +
-                        ");" +
+                        ");\n" +
                         "create table if not exists search_record(\n" +
+                        "    id BIGINT(20) primary key auto_increment NOT NULL ,\n" +
                         "    user_id BIGINT(20) NOT NULL ,\n" +
                         "    group_id BIGINT(20) DEFAULT NULL ,\n" +
                         "    nick TEXT DEFAULT NULL,\n" +
@@ -56,6 +59,7 @@ class DBUtils {
                         "    update_date DATETIME DEFAULT NULL\n" +
                         ");"
             transaction(db) {
+                SchemaUtils.create(UserTable)
                 addLogger(StdOutSqlLogger)
                 exec(createTablesSql)
             }

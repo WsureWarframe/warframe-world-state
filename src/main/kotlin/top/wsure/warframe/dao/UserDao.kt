@@ -5,9 +5,11 @@ import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
-import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.UserEntity
 import top.wsure.warframe.entity.UserTable
 
@@ -29,34 +31,24 @@ object UserDao {
 
     suspend fun userList(event: MessageEvent) {
         val user = event.sender
-        event.subject.sendMessage(MessageChainBuilder()
-            .append(PlainText("用户列表\n"))
-            .append(PlainText(
-                users(user).joinToString("\n") { "[${it.id.value}]: ${it.nick}" }
-            ))
-            .build()
+        event.subject.sendMessage(
+            MessageChainBuilder()
+                .append(PlainText("用户列表\n"))
+                .append(PlainText(users(user).joinToString("\n")))
+                .build()
         )
-        /*
-            .forEach {
-                logger.info(it.toString())
-                messageChain.append(PlainText("[${it.id}]:${it.nick}\n"))
-                    .append(Image(event.subject.uploadImage(OkHttpUtils.getImage(it.avatarUrl)).imageId))
-                    .append(PlainText("\n"))
-            }
-         */
     }
-    private fun users(user: User):List<UserEntity>{
-        var userList = emptyList<UserEntity>()
-        transaction(WorldState.globalDatabase) {
-            userList =  UserEntity.find {
+
+    private fun users(user: User): List<String> {
+        return transaction {
+            addLogger(StdOutSqlLogger)
+            UserTable.select {
                 if (user is Member)
                     UserTable.id.inList(user.group.members.map { it.id })
                 else
                     UserTable.id.isNotNull()
-            }
-                .toList()
+            }.map { "[${it[UserTable.id]}]: ${it[UserTable.nick]}" }
         }
-        return userList
     }
 
     private fun insert(user: User): UserEntity {

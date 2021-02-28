@@ -5,6 +5,7 @@ import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.jodatime.datetime
+import org.joda.time.DateTime
 
 /**
  * FileName: SearchRecordEntity
@@ -33,6 +34,6 @@ object SearchRecordTable : LongIdTable("SEARCH_RECORD") {
     var keyWord = text("key_word").nullable()
     var param = text("param").nullable()
     var url = text("url").nullable()
-    val createDate = datetime("create_date")
-    val updateDate = datetime("update_date")
+    val createDate = datetime("create_date").default(DateTime.now())
+    val updateDate = datetime("update_date").default(DateTime.now())
 }

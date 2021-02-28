@@ -2,7 +2,6 @@ package top.wsure.warframe.dao
 
 import net.mamoe.mirai.contact.User
 import org.joda.time.DateTime
-import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.SearchRecordEntity
 import top.wsure.warframe.utils.MessageUtils
 

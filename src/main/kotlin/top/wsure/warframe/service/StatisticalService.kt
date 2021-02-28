@@ -5,7 +5,6 @@ import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.SearchRecordTable
 import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
@@ -37,12 +36,13 @@ object StatisticalService {
     fun queryTopSearch(groupId: Long?, start: LocalDateTime?, end: LocalDateTime?): List<TopSearchBo> {
         var searchList = emptyList<TopSearchBo>()
         transaction {
+            addLogger(StdOutSqlLogger)
             val query = SearchRecordTable
                 .slice(SearchRecordTable.keyWord, SearchRecordTable.param, SearchRecordTable.id.count().alias(COUNT_COLUMN))
                 .selectAll()
                 .groupBy(SearchRecordTable.keyWord, SearchRecordTable.param)
-                .orderBy( SearchRecordTable.id.count() to SortOrder.DESC)
-                .limit(0,5)
+                .orderBy( SearchRecordTable.id.count().alias(COUNT_COLUMN) to SortOrder.DESC)
+                .limit(5,0)
 
             if (groupId != null)
                 query.andWhere {  SearchRecordTable.groupId eq groupId }

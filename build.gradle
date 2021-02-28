@@ -20,7 +20,8 @@ repositories {
 
 dependencies {
     def exposedVersion = "0.29.1"
-
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0"
+    
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
     implementation "com.h2database:h2:1.4.200"

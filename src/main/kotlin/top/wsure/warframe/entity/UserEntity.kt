@@ -25,7 +25,7 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id) {
 }
 
 object UserTable : LongIdTable("USER") {
-    var nick = text("nick").nullable()
+    var nick = text("nick").nullable().default(null)
     var remark = text("remark").nullable()
     var avatarUrl = text("avatar_url").nullable()
     val createDate = datetime("create_date")

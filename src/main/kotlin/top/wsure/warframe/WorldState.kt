@@ -4,19 +4,20 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.event.events.MessageRecallEvent
-import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.utils.info
 import net.mamoe.mirai.event.globalEventChannel
+import net.mamoe.mirai.message.data.MessageChainBuilder
+import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.utils.info
 import org.jetbrains.exposed.sql.Database
+import top.wsure.warframe.dao.UserDao
 import top.wsure.warframe.enums.BeginWithKeyword
 import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
-import top.wsure.warframe.dao.UserDao
 import top.wsure.warframe.service.SaveDataService
 import top.wsure.warframe.service.StatisticalService
+import top.wsure.warframe.utils.DBUtils
 import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
-import top.wsure.warframe.utils.DBUtils
 
 object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
@@ -30,7 +31,7 @@ object WorldState : KotlinPlugin(
 
     private const val HELP_KEY = "help"
     private const val DB_NAME = "test"
-    private val DB_FILE = resolveDataFile(DB_NAME)
+    val DB_FILE = resolveDataFile(DB_NAME)
     lateinit var globalDatabase: Database
 
 
