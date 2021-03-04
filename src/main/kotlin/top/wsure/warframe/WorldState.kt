@@ -32,8 +32,6 @@ object WorldState : KotlinPlugin(
     private const val HELP_KEY = "help"
     private const val DB_NAME = "test"
     val DB_FILE = resolveDataFile(DB_NAME)
-    lateinit var globalDatabase: Database
-
 
     override fun onEnable() {
         val osName = System.getProperty("os.name").split(" ")[0]
@@ -107,7 +105,6 @@ object WorldState : KotlinPlugin(
     }
 
     private fun initDatabase(){
-        globalDatabase = DBUtils.getDatabase(DB_FILE)
-        DBUtils.initTableIfNotExist(globalDatabase)
+        DBUtils.initTableIfNotExist()
     }
 }

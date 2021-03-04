@@ -6,10 +6,11 @@ package top.wsure.warframe.enums
  * Date:     2020/9/25 9:29 上午
  * Description:
  */
-enum class BeginWithKeyword {
-    wm,
-    rm,
-    wiki,
+enum class BeginWithKeyword(val path:String) {
+    wm("wm"),
+    rm("rm"),
+    wiki("wiki"),
+    tran("dict/tran"),
     ;
     companion object {
         fun getByStartWith(message:String):BeginWithKeyword ?{

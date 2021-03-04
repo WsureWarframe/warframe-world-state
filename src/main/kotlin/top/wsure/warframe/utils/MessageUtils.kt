@@ -23,10 +23,10 @@ class MessageUtils {
             return when {
                 worldStateKey != null -> Instruction("wf",worldStateKey.name,"${NYMPH_HOST}/wf/robot/${worldStateKey.name}")
 
-                (beginWithKeyword != null )  -> {
+                beginWithKeyword != null -> {
                     val param = getParam(beginWithKeyword,message)
                     if(param != null)
-                        Instruction(beginWithKeyword.name,param,"${NYMPH_HOST}/${beginWithKeyword.name}/robot/${param}")
+                        Instruction(beginWithKeyword.name,param,"${NYMPH_HOST}/${beginWithKeyword.path}/robot/${param}")
                     else
                         null
                 }

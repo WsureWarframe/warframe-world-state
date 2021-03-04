@@ -8,6 +8,7 @@ import top.wsure.warframe.WorldState
 import top.wsure.warframe.dao.GroupDao
 import top.wsure.warframe.dao.SearchRecordDao
 import top.wsure.warframe.dao.UserDao
+import top.wsure.warframe.utils.DBUtils
 import top.wsure.warframe.utils.MessageUtils
 
 /**
@@ -19,7 +20,7 @@ import top.wsure.warframe.utils.MessageUtils
 object SaveDataService {
 
     fun storage(user: User, instruction: MessageUtils.Instruction) {
-        transaction(WorldState.globalDatabase) {
+        transaction(DBUtils.getDatabase(WorldState.DB_FILE)) {
             UserDao.saveUser(user)
             val record = SearchRecordDao.insert(user, instruction)
             if (user is Member) {

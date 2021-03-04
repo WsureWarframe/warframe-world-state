@@ -10,8 +10,10 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import top.wsure.warframe.WorldState
 import top.wsure.warframe.entity.UserEntity
 import top.wsure.warframe.entity.UserTable
+import top.wsure.warframe.utils.DBUtils
 
 /**
  * FileName: UserService
@@ -40,7 +42,7 @@ object UserDao {
     }
 
     private fun users(user: User): List<String> {
-        return transaction {
+        return transaction(DBUtils.getDatabase(WorldState.DB_FILE)) {
             addLogger(StdOutSqlLogger)
             UserTable.select {
                 if (user is Member)
