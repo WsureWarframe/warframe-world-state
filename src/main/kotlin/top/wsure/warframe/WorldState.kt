@@ -1,20 +1,31 @@
 package top.wsure.warframe
 
+import kotlinx.coroutines.launch
+import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
+import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
+import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.permission.AbstractPermitteeId
+import net.mamoe.mirai.console.permission.Permission
+import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.info
-import org.jetbrains.exposed.sql.Database
+import top.wsure.warframe.command.WFHelp
 import top.wsure.warframe.dao.UserDao
+import top.wsure.warframe.data.WorldStateData
 import top.wsure.warframe.enums.BeginWithKeyword
 import top.wsure.warframe.enums.DatabaseKey
 import top.wsure.warframe.enums.WorldStateKey
 import top.wsure.warframe.service.SaveDataService
 import top.wsure.warframe.service.StatisticalService
+import top.wsure.warframe.utils.CommandUtils
+import top.wsure.warframe.utils.CommandUtils.Companion.handleCommand
 import top.wsure.warframe.utils.DBUtils
 import top.wsure.warframe.utils.MessageUtils
 import top.wsure.warframe.utils.OkHttpUtils
@@ -33,6 +44,8 @@ object WorldState : KotlinPlugin(
     private const val DB_NAME = "test"
     val DB_FILE = resolveDataFile(DB_NAME)
 
+    @ExperimentalCommandDescriptors
+    @ConsoleExperimentalApi
     override fun onEnable() {
         val osName = System.getProperty("os.name").split(" ")[0]
         val osArch = System.getProperty("os.arch")
@@ -42,6 +55,27 @@ object WorldState : KotlinPlugin(
 
         super.onEnable()
         //加载数据库
+
+        WorldStateData.reload()
+
+        CommandUtils.registerAll(WorldStateData.commandList)
+
+        WFHelp(this,WorldStateData.helpKey).register()
+
+        AbstractPermitteeId.AnyContact.permit(this.parentPermission)
+
+        globalEventChannel().subscribeAlways<MessageEvent> {
+            val sender = kotlin.runCatching {
+                this.toCommandSender()
+            }.getOrNull()
+
+            WorldState.launch { // Async
+                if (sender != null) {
+                    handleCommand(sender, message)
+                }
+            }
+        }
+        /*
         Thread {
             initDatabase()
 
@@ -93,7 +127,7 @@ object WorldState : KotlinPlugin(
                 logger.info { "${event.authorId} 的消息被撤回了" }
             }
         }.start()
-
+*/
     }
 
     /**

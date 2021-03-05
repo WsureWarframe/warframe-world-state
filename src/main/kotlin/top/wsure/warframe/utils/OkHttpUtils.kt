@@ -1,7 +1,11 @@
 package top.wsure.warframe.utils
 
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import top.wsure.warframe.data.RemoteCommand
+import top.wsure.warframe.utils.OkHttpUtils.Companion.doGetObject
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
@@ -34,8 +38,15 @@ class OkHttpUtils {
             val response = call.execute()
             return response.body?.byteStream()!!
         }
+
+        inline fun <reified T> doGetObject(url: String):T{
+            return doGet(url)?.let { Json{ ignoreUnknownKeys = true }.decodeFromString<T>(it) }!!
+        }
+
+
     }
-
-
-
+}
+fun main(){
+    val list:List<RemoteCommand> = doGetObject("http://localhost:3000/robot/commands")
+    list.forEach { println(it.toString()) }
 }
