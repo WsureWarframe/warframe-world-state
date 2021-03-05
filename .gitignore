@@ -10,7 +10,7 @@ config/
 
 logs/
 
-data/
+/data/
 
 device.json
 gradle/
