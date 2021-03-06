@@ -1,6 +1,8 @@
 package top.wsure.warframe.service
 
+import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import org.jetbrains.exposed.sql.*
@@ -22,17 +24,15 @@ object StatisticalService {
 
     private const val COUNT_COLUMN:String = "count_"
 
-    suspend fun queryKeyTop(event: MessageEvent) {
-        event.subject.sendMessage(
-            MessageChainBuilder()
+    fun queryKeyTop(): Message {
+        return MessageChainBuilder()
             .append(PlainText("${DatabaseKey.KEY_TOP.keyWord}(Top5)\n功能\t参数\t次数\n"))
             .append(PlainText(queryTopSearch(null, null, null).joinToString("\n") {
-                    "${it.keyWord}\t${
-                        if (it.keyWord.equals("wf")) WorldStateKey.valueOf(it.param!!).keyWord else it.param
-                    }\t${it.count}"
-                }))
+                "${it.keyWord}\t${
+                    if (it.keyWord.equals("wf")) WorldStateKey.valueOf(it.param!!).keyWord else it.param
+                }\t${it.count}"
+            }))
             .build()
-        )
     }
 
     fun queryTopSearch(groupId: Long?, start: LocalDateTime?, end: LocalDateTime?): List<TopSearchBo> {

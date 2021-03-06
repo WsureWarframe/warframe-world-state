@@ -1,7 +1,10 @@
 package top.wsure.warframe.utils
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import top.wsure.warframe.data.RemoteCommand
@@ -17,6 +20,8 @@ import java.util.concurrent.TimeUnit
  */
 class OkHttpUtils {
     companion object {
+        private val logger: MiraiLogger = MiraiLogger.create(this::class.java.name)
+
         private val client = OkHttpClient().newBuilder().readTimeout(60,TimeUnit.SECONDS).build()
 
         fun doGet(url:String):String?{
@@ -39,14 +44,15 @@ class OkHttpUtils {
             return response.body?.byteStream()!!
         }
 
-        inline fun <reified T> doGetObject(url: String):T{
-            return doGet(url)?.let { Json{ ignoreUnknownKeys = true }.decodeFromString<T>(it) }!!
+        suspend inline fun <reified T> doGetObject(url: String):T{
+            return asyncDoGet(url)?.let { Json{ ignoreUnknownKeys = true }.decodeFromString<T>(it) }!!
         }
 
+        suspend fun asyncDoGet(url: String):String?{
+            return withContext(Dispatchers.Default){
+                doGet(url)
+            }
+        }
 
     }
-}
-fun main(){
-    val list:List<RemoteCommand> = doGetObject("http://localhost:3000/robot/commands")
-    list.forEach { println(it.toString()) }
 }

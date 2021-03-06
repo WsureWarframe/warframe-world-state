@@ -1,17 +1,22 @@
 package top.wsure.warframe.command
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.command.CommandOwner
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.RawCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.data.RemoteCommand
 import top.wsure.warframe.data.WorldStateData
+import top.wsure.warframe.service.SaveDataService
 import top.wsure.warframe.utils.CommandUtils
+import top.wsure.warframe.utils.MessageUtils
 
 /**
  * 这是一个包含参数的指令
@@ -26,10 +31,10 @@ import top.wsure.warframe.utils.CommandUtils
 @ConsoleExperimentalApi
 class WFParamCommand(
     plugin: CommandOwner,
-    private val command:RemoteCommand,
-) : RawCommand(plugin, primaryName = command.name, description = command.desc){
+    private val command: RemoteCommand,
+) : RawCommand(plugin, primaryName = command.name, description = command.desc) {
 
-    private val logger:MiraiLogger = MiraiConsole.createLogger(command.name)
+    private val logger: MiraiLogger = MiraiConsole.createLogger(command.name)
 
     @ExperimentalCommandDescriptors
     override val prefixOptional = true
@@ -38,6 +43,13 @@ class WFParamCommand(
         val msg = args.joinToString(" ") { it.content }
         val remoteUrl = WorldStateData.host + command.path + msg
         logger.info("${this.user?.nick} 查询 $remoteUrl")
+        SaveDataService.storage(
+            this.user ?: this.bot as User, MessageUtils.Instruction(
+                command.alia,
+                msg,
+                remoteUrl
+            )
+        )
         sendMessage(CommandUtils.getRemoteResponse(remoteUrl))
     }
 

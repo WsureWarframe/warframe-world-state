@@ -1,8 +1,10 @@
 package top.wsure.warframe.dao
 
+import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.contact.Member
 import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.PlainText
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -31,17 +33,14 @@ object UserDao {
         }
     }
 
-    suspend fun userList(event: MessageEvent) {
-        val user = event.sender
-        event.subject.sendMessage(
-            MessageChainBuilder()
+    fun userList(user: User?) :Message{
+            return MessageChainBuilder()
                 .append(PlainText("用户列表\n"))
                 .append(PlainText(users(user).joinToString("\n")))
                 .build()
-        )
     }
 
-    private fun users(user: User): List<String> {
+    private fun users(user: User?): List<String> {
         return transaction(DBUtils.getDatabase(WorldState.DB_FILE)) {
             addLogger(StdOutSqlLogger)
             UserTable.select {

@@ -1,34 +1,27 @@
 package top.wsure.warframe
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
 import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.permission.AbstractPermitteeId
-import net.mamoe.mirai.console.permission.Permission
 import net.mamoe.mirai.console.permission.PermissionService.Companion.permit
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.MessageEvent
-import net.mamoe.mirai.event.events.MessageRecallEvent
 import net.mamoe.mirai.event.globalEventChannel
-import net.mamoe.mirai.message.data.MessageChainBuilder
-import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.utils.info
+import top.wsure.warframe.command.DatabaseCommand
 import top.wsure.warframe.command.WFHelp
-import top.wsure.warframe.dao.UserDao
+import top.wsure.warframe.data.RemoteCommand
 import top.wsure.warframe.data.WorldStateData
-import top.wsure.warframe.enums.BeginWithKeyword
-import top.wsure.warframe.enums.DatabaseKey
-import top.wsure.warframe.enums.WorldStateKey
-import top.wsure.warframe.service.SaveDataService
-import top.wsure.warframe.service.StatisticalService
 import top.wsure.warframe.utils.CommandUtils
 import top.wsure.warframe.utils.CommandUtils.Companion.handleCommand
 import top.wsure.warframe.utils.DBUtils
-import top.wsure.warframe.utils.MessageUtils
-import top.wsure.warframe.utils.OkHttpUtils
 
 object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
@@ -53,16 +46,19 @@ object WorldState : KotlinPlugin(
         logger.info{"os.arch:${osArch}"}
         logger.info{"os.version:${System.getProperty("os.version")}"}
 
-        super.onEnable()
-        //加载数据库
+        WorldState.launch {
+            WorldStateData.commandList = CommandUtils.getRemoteCommand(WorldStateData.host)
 
-        WorldStateData.reload()
+            CommandUtils.registerAll(WorldStateData.commandList)
 
-        CommandUtils.registerAll(WorldStateData.commandList)
+            WFHelp(WorldState,WorldStateData.helpKey).register()
 
-        WFHelp(this,WorldStateData.helpKey).register()
+            DatabaseCommand.register()
 
-        AbstractPermitteeId.AnyContact.permit(this.parentPermission)
+            AbstractPermitteeId.AnyContact.permit(WorldState.parentPermission)
+
+            initDatabase()
+        }
 
         globalEventChannel().subscribeAlways<MessageEvent> {
             val sender = kotlin.runCatching {
@@ -77,7 +73,8 @@ object WorldState : KotlinPlugin(
         }
         /*
         Thread {
-            initDatabase()
+            //加载数据库
+
 
             logger.info("Plugin loaded!")
             globalEventChannel().subscribeAlways<MessageEvent> { event ->
@@ -138,7 +135,11 @@ object WorldState : KotlinPlugin(
 
     }
 
-    private fun initDatabase(){
-        DBUtils.initTableIfNotExist()
+    private suspend fun initDatabase(){
+        withContext(Dispatchers.Default){
+            logger.info("初始化数据库 - 开始")
+            DBUtils.initTableIfNotExist()
+            logger.info("初始化数据库 - 结束")
+        }
     }
 }

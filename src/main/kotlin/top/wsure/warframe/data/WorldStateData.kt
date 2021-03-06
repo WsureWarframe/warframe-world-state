@@ -2,6 +2,7 @@ package top.wsure.warframe.data
 
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.value
+import top.wsure.warframe.WorldState
 import top.wsure.warframe.utils.CommandUtils
 
 /**
@@ -15,11 +16,11 @@ object WorldStateData : AutoSavePluginConfig("WorldStateData") {
     var host: String by value("http://nymph.rbq.life:3000")
 
     //help key
-    var helpKey: String by value("help")
+    var helpKey: String by value("菜单")
 
     var commandList: List<RemoteCommand> by value(emptyList())
 
-    init {
-        commandList = CommandUtils.getRemoteCommand(host)
-    }
+//    init {
+//        commandList = CommandUtils.getRemoteCommand(host)
+//    }
 }
