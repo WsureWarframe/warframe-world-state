@@ -47,7 +47,7 @@ class CommandUtils {
         suspend fun getRemoteResponse(url:String,bot:Bot?,user:User?):Message{
             val query = "?bots=${
                 bot?.id ?: Bot.instances.map { it.id }.joinToString(",")
-            }&users${
+            }&users=${
                 user?.id ?: Bot.instances.map { it.id }.joinToString(",")
             }"
             var response:String? = null
