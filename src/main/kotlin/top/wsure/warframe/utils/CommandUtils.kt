@@ -1,5 +1,6 @@
 package top.wsure.warframe.utils
 
+import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.command.Command
 import net.mamoe.mirai.console.command.CommandExecuteResult
@@ -9,6 +10,7 @@ import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
@@ -42,10 +44,15 @@ class CommandUtils {
             return res
         }
 
-        suspend fun getRemoteResponse(url:String):Message{
+        suspend fun getRemoteResponse(url:String,bot:Bot?,user:User?):Message{
+            val query = "?bots=${
+                bot?.id ?: Bot.instances.map { it.id }.joinToString(",")
+            }&users${
+                user?.id ?: Bot.instances.map { it.id }.joinToString(",")
+            }"
             var response:String? = null
             try {
-                response = OkHttpUtils.asyncDoGet(url)
+                response = OkHttpUtils.asyncDoGet(url+query)
             }catch (e:Exception){
                 WorldState.logger.error(e)
             }

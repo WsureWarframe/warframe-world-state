@@ -47,7 +47,7 @@ class WFSimpleCommand(
                 )
             )
         }
-        sendMessage(CommandUtils.getRemoteResponse(remoteUrl))
+        sendMessage(CommandUtils.getRemoteResponse(remoteUrl,this.bot,this.user))
     }
 
 }
