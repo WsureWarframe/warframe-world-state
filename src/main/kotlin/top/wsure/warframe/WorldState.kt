@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.mamoe.mirai.console.command.CommandManager
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
 import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
@@ -65,11 +66,14 @@ object WorldState : KotlinPlugin(
                 this.toCommandSender()
             }.getOrNull()
 
-            WorldState.launch { // Async
-                if (sender != null) {
-                    handleCommand(sender, message)
+            if (sender != null) {
+                WorldState.launch { // Async
+                    runCatching {
+                        CommandManager.executeCommand(sender, message)
+                    }
                 }
             }
+
         }
         /*
         Thread {

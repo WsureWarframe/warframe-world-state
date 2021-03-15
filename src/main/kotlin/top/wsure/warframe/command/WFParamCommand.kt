@@ -1,12 +1,12 @@
 package top.wsure.warframe.command
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.command.CommandOwner
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.RawCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.command.isNotConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.message.data.MessageChain
@@ -43,13 +43,15 @@ class WFParamCommand(
         val msg = args.joinToString(" ") { it.content }
         val remoteUrl = WorldStateData.host + command.path + msg
         logger.info("${this.user?.nick} 查询 $remoteUrl")
-        SaveDataService.storage(
-            this.user ?: this.bot as User, MessageUtils.Instruction(
-                command.alia,
-                msg,
-                remoteUrl
+        if(isNotConsole()){
+            SaveDataService.storage(
+                this.user ?: this.bot as User, MessageUtils.Instruction(
+                    command.alia,
+                    msg,
+                    remoteUrl
+                )
             )
-        )
+        }
         sendMessage(CommandUtils.getRemoteResponse(remoteUrl))
     }
 
