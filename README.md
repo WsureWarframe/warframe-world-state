@@ -1,13 +1,13 @@
 # warframe-world-state
 ## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，现在已经转战Mirai
-### 兼容Mirai-Console 
+### 兼容Mirai-Console (Windows/MacOS/Linux)
     最新:
     Mirai-Console 2.4.0+ -> 0.0.4
     历史:
     Mirai-Console 2.0.0 ->  0.0.3 
     Mirai-Console 0.5.2 ->  0.0.2-alpha
                             0.0.1-alpha
-### 兼容MiraiAndroid
+### 兼容MiraiAndroid (Android)
     最新: 
     MiraiAndroid 3.1.0+ ->  0.0.4
     历史:
@@ -19,17 +19,29 @@
 - 群：[435021808](https://jq.qq.com/?_wv=1027&k=rGrjxfv0) 
 # 特色
 - 支持warframe世界状态查询、包括赏金任务  
-# 基本使用方法
-0. 从 [Release](https://github.com/WsureDev/warframe-world-state/releases) 下载 插件(兼容性查看上方)
-1. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid`(兼容性查看上方)
-2. 在安卓手机上安装MiraiAndroid
-3.  - 点击左上角 
-    - 插件管理 
+# MiraiAndroid安装方法 (Android)
+0. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid` 最新版 (兼容性查看上方)
+1. 在安卓手机上安装MiraiAndroid
+2. 选择1:`jar插件` (如无法正常安装请尝试`选择2`)
+    - 从 [warframe-world-stat/release](https://github.com/WsureDev/warframe-world-state/releases) 下载 最新版 插件(兼容性查看上方)
+    - 点击左上角 
+    - 插件管理
+    - 如果以前安装过本插件，无论apk还是jar，都先删除
     - 选择右上角添加本插件 
     - 点击导入（保持默认）
     - 输入warframe.jar
-    - 点击左上角 选择快速重启
-4. 在界面右上角添加qq号和密码
+    - 等待编译完成
+3. 选择2:`apk插件`
+    - 从[warframe-world-state-apk/release](https://github.com/WsureDev/warframe-world-state-apk/releases) 下载 最新版 插件(兼容性查看上方)
+    - 点击左上角
+    - 插件管理
+    - 如果以前安装过本插件，无论apk还是jar，都先删除    
+    - 安装下载的apk插件
+4. 在界面右上角添加快速登录的qq号和密码
+5. 点击左上角 选择快速重启
+# Mirai-Console安装方法 (Windows/MacOS/Linux)
+    待补充
+
 # 默认指令列表  
     warframe.market: 
         wm 关键词
