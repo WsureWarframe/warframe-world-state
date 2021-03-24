@@ -64,3 +64,4 @@
 1. 失败经验：mybatisPlus、mybatis、ktorm、sqlite jdbc在MiraiAndroid上无法运行(扫包路径问题、MiraiAndroid内二次打包文件过滤问题、安卓so文件加载问题、Android.jar与rt.jar区别)。
 2. 成功经验：数据库方案选型：h2 jdbc+Exposed 或 原生jdbc
 3. exposed：写操作使用entity（DAO），读操作请用table（DSL），使用Entity读会导致出现对象已关闭的错误
+4. 数据库已经从本项目`master`分支移除，需要查看用例请看`Exposed-archived`分支
