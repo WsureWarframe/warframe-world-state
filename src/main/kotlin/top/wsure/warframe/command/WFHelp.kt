@@ -5,7 +5,6 @@ import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
-import top.wsure.warframe.WorldState
 import top.wsure.warframe.data.WorldStateData
 import top.wsure.warframe.utils.CommandUtils
 

@@ -7,8 +7,6 @@ import kotlinx.serialization.json.Json
 import net.mamoe.mirai.utils.MiraiLogger
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import top.wsure.warframe.data.RemoteCommand
-import top.wsure.warframe.utils.OkHttpUtils.Companion.doGetObject
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
