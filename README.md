@@ -2,14 +2,16 @@
 ## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，现在已经转战Mirai
 ### 兼容Mirai-Console 
     最新:
-    Mirai-Console 2.0.0 ->  0.0.3 
+    Mirai-Console 2.4.0+ -> 0.0.4
     历史:
+    Mirai-Console 2.0.0 ->  0.0.3 
     Mirai-Console 0.5.2 ->  0.0.2-alpha
                             0.0.1-alpha
 ### 兼容MiraiAndroid
     最新: 
-    MiraiAndroid 3.0.0 ->  0.0.3
+    MiraiAndroid 3.1.0+ ->  0.0.4
     历史:
+    MiraiAndroid 3.0.0 ->   0.0.3
     MiraiAndroid 2.10.4 ->  0.0.2-alpha
                             0.0.1-alpha
 ### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api) 提供给接口服务
