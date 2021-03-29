@@ -10,4 +10,4 @@ import kotlinx.serialization.Serializable
  * Description:
  */
 @Serializable
-data class CacheValue<V>(val timeout:Long,val value:V)
+data class CacheValue<K,V :java.io.Serializable>(val key:K,val value:V,val timeout:Long)

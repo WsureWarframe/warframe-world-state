@@ -1,7 +1,9 @@
 package top.wsure.warframe.cache
 
+import kotlinx.serialization.Serializable
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.TimeUnit
+import java.util.stream.Collectors
 
 /**
  * FileName: ExpirableCache
@@ -9,9 +11,9 @@ import java.util.concurrent.TimeUnit
  * Date:     2021/3/29 5:16 下午
  * Description:
  */
-class ExpirableCache<K, V>(
-    private val delegate: ConcurrentMap<K, CacheValue<V>>
-) : ConcurrentMap<K, CacheValue<V>> by delegate {
+class ExpirableCache<K, V:java.io.Serializable>(
+    private val delegate: ConcurrentMap<K, CacheValue<K, V>>
+) : ConcurrentMap<K, CacheValue<K, V>> by delegate {
     private var lastFlushTime = System.nanoTime()
 
     override val size: Int
@@ -19,26 +21,32 @@ class ExpirableCache<K, V>(
             recycle()
             return delegate.size
         }
+    override val keys: MutableSet<K>
+        get() {
+            recycle()
+            return delegate.keys
+        }
 
-    fun put(k:K,v:V,timeout:Long){
-        delegate[k] = CacheValue<V>(timeout,v)
+    fun put(k: K, v: V, wait: Long?) {
+        val timeout = if (wait == null) 0 else (wait + System.nanoTime())
+        delegate[k] = CacheValue(k, v, timeout)
     }
 
-    override fun remove(key: K): CacheValue<V>? {
+    override fun remove(key: K): CacheValue<K, V>? {
         recycle()
         return delegate.remove(key)
     }
 
-    override fun get(key: K): V? {
+    override fun get(key: K): CacheValue<K, V>? {
         recycle()
-        return delegate[key]?.value
+        return delegate[key]
     }
 
     private fun recycle() {
-        val shouldRecycle = System.nanoTime() - lastFlushTime >= TimeUnit.MILLISECONDS.toNanos(0)
-        if (shouldRecycle) {
-            delegate.clear()
-            lastFlushTime = System.nanoTime()
-        }
+        val now = System.nanoTime()
+        delegate.values.stream()
+            .filter { it.timeout != 0L && now > it.timeout }
+            .map { it.key }
+            .forEach { delegate.remove(it) }
     }
 }

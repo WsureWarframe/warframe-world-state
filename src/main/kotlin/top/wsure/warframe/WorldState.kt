@@ -13,10 +13,14 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.utils.info
+import top.wsure.warframe.cache.CacheValue
+import top.wsure.warframe.cache.ExpirableCache
 import top.wsure.warframe.command.ChatCommandEditor
 import top.wsure.warframe.command.WFHelp
 import top.wsure.warframe.data.WorldStateData
 import top.wsure.warframe.utils.CommandUtils
+import top.wsure.warframe.utils.ScheduleUtils
+import java.util.*
 
 object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
@@ -47,6 +51,12 @@ object WorldState : KotlinPlugin(
             ChatCommandEditor.register()
 
             AbstractPermitteeId.AnyContact.permit(WorldState.parentPermission)
+
+            val cache = ExpirableCache(WorldStateData.cache)
+
+            cache.put("aa","bb",6000L)
+
+            ScheduleUtils.loopEvent({ println(cache.keys.toString())}, Date(),500L)
         }
 
         globalEventChannel().subscribeAlways<MessageEvent> {
