@@ -2,6 +2,8 @@ package top.wsure.warframe.data
 
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.value
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 /**
  * FileName: WorldStateData
@@ -19,4 +21,8 @@ object WorldStateData : AutoSavePluginConfig("WorldStateData") {
     var helpKey: String by value("菜单")
 
     var commandList: List<RemoteCommand> by value(emptyList())
+
+    var taskList: List<RemoteTask> by value(emptyList())
+
+    var cache: ConcurrentMap<String, Any> by value(ConcurrentHashMap())
 }
