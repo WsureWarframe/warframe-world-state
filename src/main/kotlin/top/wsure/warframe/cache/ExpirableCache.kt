@@ -14,7 +14,6 @@ import java.util.stream.Collectors
 class ExpirableCache<K, V:java.io.Serializable>(
     private val delegate: ConcurrentMap<K, CacheValue<K, V>>
 ) : ConcurrentMap<K, CacheValue<K, V>> by delegate {
-    private var lastFlushTime = System.nanoTime()
 
     override val size: Int
         get() {
@@ -28,7 +27,7 @@ class ExpirableCache<K, V:java.io.Serializable>(
         }
 
     fun put(k: K, v: V, wait: Long?) {
-        val timeout = if (wait == null) 0 else (wait + System.nanoTime())
+        val timeout = if (wait == null) 0 else (wait + System.currentTimeMillis())
         delegate[k] = CacheValue(k, v, timeout)
     }
 
@@ -43,7 +42,7 @@ class ExpirableCache<K, V:java.io.Serializable>(
     }
 
     private fun recycle() {
-        val now = System.nanoTime()
+        val now = System.currentTimeMillis()
         delegate.values.stream()
             .filter { it.timeout != 0L && now > it.timeout }
             .map { it.key }
