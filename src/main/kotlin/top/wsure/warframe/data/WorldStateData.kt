@@ -3,7 +3,6 @@ package top.wsure.warframe.data
 import net.mamoe.mirai.console.data.AutoSavePluginConfig
 import net.mamoe.mirai.console.data.value
 import top.wsure.warframe.cache.CacheValue
-import java.io.Serializable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
@@ -14,6 +13,7 @@ import java.util.concurrent.ConcurrentMap
  * Description:
  */
 object WorldStateData : AutoSavePluginConfig("WorldStateData") {
+    var masters: MutableSet<Long> by value(mutableSetOf())
 
     var useCM: Boolean by value(true)
     //api host 默认使用自身的，可自己改
@@ -26,5 +26,5 @@ object WorldStateData : AutoSavePluginConfig("WorldStateData") {
 
     var taskList: List<RemoteTask> by value(emptyList())
 
-    var cache: ConcurrentMap<String, CacheValue<String,Serializable>> by value(ConcurrentHashMap())
+    var cache: ConcurrentMap<String, CacheValue<String>> by value(ConcurrentHashMap())
 }

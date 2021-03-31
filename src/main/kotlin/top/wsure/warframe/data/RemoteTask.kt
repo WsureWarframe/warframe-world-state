@@ -18,8 +18,10 @@ data class RemoteTask(
     )
 
 enum class TaskEnum{
-    NOTIFY,
-    UPDATE,
+    NOTIFY_GROUP,
+    NOTIFY_MASTER,
     REFRESH,
     PULL,
+    RELOAD,
+    CANCEL,
 }
