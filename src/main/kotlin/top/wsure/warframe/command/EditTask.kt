@@ -79,10 +79,8 @@ object EditTask : CompositeCommand(
         val remoteTask = WorldStateData.taskList.find { it.name == task }
         val groupId = PromiseUtils.getGroupId(sender)
         if (remoteTask != null && groupId != null) {
-            var groupSetting = WorldStateData.groupTaskSetting[groupId]
-            if (groupSetting == null) {
-                groupSetting = HashMap()
-                WorldStateData.groupTaskSetting[groupId] = groupSetting
+            if ( WorldStateData.groupTaskSetting[groupId] == null) {
+                WorldStateData.groupTaskSetting[groupId] = HashMap()
             }
             setOperator(sender,groupId, remoteTask,enabled)
         }
@@ -104,6 +102,9 @@ object EditTask : CompositeCommand(
         if (remoteTask != null) {
             val groups = Bot.instances.map { it.groups }.flatten().distinct()
             groups.forEach {
+                if (WorldStateData.groupTaskSetting[it.id] == null) {
+                    WorldStateData.groupTaskSetting[it.id] = HashMap()
+                }
                 setOperator(sender,it.id , remoteTask,enabled)
             }
         }
