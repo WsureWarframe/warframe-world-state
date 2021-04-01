@@ -22,6 +22,4 @@ enum class TaskEnum{
     NOTIFY_MASTER,
     REFRESH,
     PULL,
-    RELOAD,
-    CANCEL,
 }

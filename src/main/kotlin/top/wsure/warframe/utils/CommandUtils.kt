@@ -9,7 +9,7 @@ import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.WorldState
-import top.wsure.warframe.cache.TaskCache
+import top.wsure.warframe.cache.ConstantObject
 import top.wsure.warframe.command.WFParamCommand
 import top.wsure.warframe.command.WFSimpleCommand
 import top.wsure.warframe.data.*
@@ -50,13 +50,12 @@ class CommandUtils {
         }
 
         suspend fun getRemoteQueue(host:String,path:String,name:String):List<RemoteQueue> {
-            logger.info("加载远程${name}queue列表-开始,host:${host}")
             var res = emptyList<RemoteQueue>()
             try {
-                res =  OkHttpUtils.doGetObject("${host}${path}")
-                logger.info("加载远程${name}queue列表-成功")
+                res =  OkHttpUtils.doGetObject("${host}${path}?token=${WorldStateData.token}")
+                logger.info("加载远程${name} - queue列表-成功")
             }catch (e:Exception){
-                logger.error("加载远程${name}queue列表-失败,请检查网络是否通畅,host:${host}",e)
+                logger.error("加载远程${name} - queue列表-失败,请检查网络是否通畅,host:${host}",e)
             }
             return res
         }
@@ -102,8 +101,8 @@ class CommandUtils {
         @ConsoleExperimentalApi
         fun executeTask(taskList: List<RemoteTask>) {
             taskList.forEach {
-                val timer = ScheduleUtils.loopEvent(WFTask(it).process, Date(),it.period,it.name)
-                TaskCache.taskMap[it.name] = timer
+                val pair = ScheduleUtils.loopEvent(WFTask(it).process, Date(),it.period,it.name)
+                ConstantObject.taskMap[it.name] = pair
             }
         }
 

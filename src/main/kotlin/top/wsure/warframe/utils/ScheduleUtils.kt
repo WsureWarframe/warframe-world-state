@@ -5,8 +5,9 @@ import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.WorldState
+import top.wsure.warframe.cache.ConstantObject
+import top.wsure.warframe.data.WorldStateData
 import java.util.*
-import kotlin.concurrent.schedule
 
 /**
 
@@ -22,16 +23,24 @@ class ScheduleUtils {
         private val logger: MiraiLogger = MiraiConsole.createLogger(this::class.java.name)
 
         @ConsoleExperimentalApi
-        fun loopEvent(process:suspend ()->Unit, start:Date, period:Long, name:String):Timer{
+        fun loopEvent(process:suspend ()->Unit, start:Date, period:Long, name:String):Pair<Timer,TimerTask>{
             val t = Timer()
-            t.schedule(start,period){
-                logger.info("[task - ${name}] - start - period:${period}ms")
-                WorldState.launch{
-                    process()
+            val enable = WorldStateData.taskList.any { it.name == name } || name == ConstantObject.TASK_HOLDER
+            val tt = object :TimerTask(){
+                override fun run(){
+                    logger.info("[task - ${name}] - start - period:${period}ms")
+                    if(!enable) {
+                        logger.info("取消 TimerTask - $name")
+                        this.cancel()
+                    }
+                    WorldState.launch{
+                        process()
+                    }
+                    logger.info("[task - ${name}] - end")
                 }
-                logger.info("[task - ${name}] - end")
             }
-            return t
+            t.schedule(tt,start,period)
+            return Pair(t,tt)
         }
     }
 }

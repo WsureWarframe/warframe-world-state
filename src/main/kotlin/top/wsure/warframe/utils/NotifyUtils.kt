@@ -8,6 +8,7 @@ import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.utils.MiraiLogger
+import top.wsure.warframe.cache.ConstantObject
 import top.wsure.warframe.data.WorldStateData
 import kotlin.system.measureTimeMillis
 
@@ -17,13 +18,13 @@ class NotifyUtils {
         private val logger: MiraiLogger = MiraiConsole.createLogger(this::class.java.name)
 
         @ConsoleExperimentalApi
-        suspend fun notifyAllGroup(bot:Bot?, message:Message):Long{
+        suspend fun notifyAllGroup(bot:Bot?, message:Message,name:String):Long{
             val useTime = measureTimeMillis {
                 withContext(Dispatchers.Default) {
                     if (bot != null) {
-                        notifyGroup(bot, message)
+                        notifyGroup(bot, message,name)
                     } else {
-                        Bot.instances.forEach { notifyGroup(it, message) }
+                        Bot.instances.forEach { notifyGroup(it, message,name) }
                     }
                 }
             }
@@ -31,12 +32,15 @@ class NotifyUtils {
             return useTime
         }
 
-        private suspend fun notifyGroup(bot: Bot, message:Message){
+        private suspend fun notifyGroup(bot: Bot, message:Message,name:String){
             bot.groups.forEach {
-                kotlin.runCatching {
-                    it.sendMessage(message)
+                val enable:Boolean = WorldStateData.groupTaskSetting.getOrDefault(it.id,HashMap()).getOrDefault(name,false)
+                if (enable || ConstantObject.INITIATIVE_NOTIFY == name){
+                    kotlin.runCatching {
+                        it.sendMessage(message)
+                    }
+                    delay(8000L+(1000 .. 3000).random())
                 }
-                delay(3000L+(0 .. 1000).random())
             }
         }
 

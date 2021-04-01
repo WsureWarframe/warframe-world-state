@@ -13,11 +13,12 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.utils.info
-import top.wsure.warframe.command.ChatCommandEditor
-import top.wsure.warframe.command.EditMaster
-import top.wsure.warframe.command.WFHelp
+import top.wsure.warframe.cache.ConstantObject
+import top.wsure.warframe.command.*
 import top.wsure.warframe.data.WorldStateData
+import top.wsure.warframe.task.TaskSchedule
 import top.wsure.warframe.utils.CommandUtils
+import top.wsure.warframe.utils.ScheduleUtils
 import java.util.*
 
 object WorldState : KotlinPlugin(
@@ -57,9 +58,15 @@ object WorldState : KotlinPlugin(
 
             EditMaster.register()
 
+            EditTask.register()
+
             ChatCommandEditor.register()
 
+            SendToAllGroup.register()
+
             AbstractPermitteeId.AnyContact.permit(WorldState.parentPermission)
+
+            ScheduleUtils.loopEvent(TaskSchedule.process, Date(),30*60*1000L,ConstantObject.TASK_HOLDER)
 
         }
 
