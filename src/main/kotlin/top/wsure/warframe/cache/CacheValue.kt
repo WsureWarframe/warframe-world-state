@@ -1,6 +1,9 @@
 package top.wsure.warframe.cache
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /**
  * FileName: CacheValue
@@ -9,4 +12,4 @@ import kotlinx.serialization.Serializable
  * Description:
  */
 @Serializable
-data class CacheValue<K,V :java.io.Serializable>(val key:K,val value:V,val timeout:Long)
+data class CacheValue<K>(val key:K,var value:String, val timeout:Long)

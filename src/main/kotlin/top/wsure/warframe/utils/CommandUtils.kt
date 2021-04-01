@@ -9,10 +9,12 @@ import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.WorldState
+import top.wsure.warframe.cache.ConstantObject
 import top.wsure.warframe.command.WFParamCommand
 import top.wsure.warframe.command.WFSimpleCommand
-import top.wsure.warframe.data.CommandType
-import top.wsure.warframe.data.RemoteCommand
+import top.wsure.warframe.data.*
+import top.wsure.warframe.task.WFTask
+import java.util.*
 
 /**
  * FileName: CommandUtils
@@ -31,6 +33,29 @@ class CommandUtils {
                 logger.info("加载远程指令列表-成功,指令列表:${getRemoteCommandHelp(res).content}")
             }catch (e:Exception){
                 logger.error("加载远程指令列表-失败,请检查网络是否通畅,host:${host}",e)
+            }
+            return res
+        }
+
+        suspend fun getRemoteTask(host:String):List<RemoteTask> {
+            logger.info("加载远程task列表-开始,host:${host}")
+            var res = emptyList<RemoteTask>()
+            try {
+                res =  OkHttpUtils.doGetObject("${host}/robot/tasks")
+                logger.info("加载远程task列表-成功,任务列表:${res.joinToString(",") { it.name }}")
+            }catch (e:Exception){
+                logger.error("加载远程task列表-失败,请检查网络是否通畅,host:${host}",e)
+            }
+            return res
+        }
+
+        suspend fun getRemoteQueue(host:String,path:String,name:String):List<RemoteQueue> {
+            var res = emptyList<RemoteQueue>()
+            try {
+                res =  OkHttpUtils.doGetObject("${host}${path}?token=${WorldStateData.token}")
+                logger.info("加载远程${name} - queue列表-成功")
+            }catch (e:Exception){
+                logger.error("加载远程${name} - queue列表-失败,请检查网络是否通畅,host:${host}",e)
             }
             return res
         }
@@ -73,5 +98,19 @@ class CommandUtils {
             }")
         }
 
+        @ConsoleExperimentalApi
+        fun executeTask(taskList: List<RemoteTask>) {
+            taskList.forEach {
+                val pair = ScheduleUtils.loopEvent(WFTask(it).process, Date(),it.period,it.name)
+                ConstantObject.taskMap[it.name] = pair
+            }
+        }
+
+        @ConsoleExperimentalApi
+        suspend fun initTaskQueue(taskList: List<RemoteTask>) {
+            taskList.forEach {
+                WFTask(it).init()
+            }
+        }
     }
 }

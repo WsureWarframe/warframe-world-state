@@ -13,11 +13,10 @@ import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.utils.info
-import top.wsure.warframe.cache.CacheValue
-import top.wsure.warframe.cache.ExpirableCache
-import top.wsure.warframe.command.ChatCommandEditor
-import top.wsure.warframe.command.WFHelp
+import top.wsure.warframe.cache.ConstantObject
+import top.wsure.warframe.command.*
 import top.wsure.warframe.data.WorldStateData
+import top.wsure.warframe.task.TaskSchedule
 import top.wsure.warframe.utils.CommandUtils
 import top.wsure.warframe.utils.ScheduleUtils
 import java.util.*
@@ -42,21 +41,33 @@ object WorldState : KotlinPlugin(
         logger.info{"os.version:${System.getProperty("os.version")}"}
 
         WorldState.launch {
+
             WorldStateData.commandList = CommandUtils.getRemoteCommand(WorldStateData.host)
+
+            WorldStateData.taskList = CommandUtils.getRemoteTask(WorldStateData.host)
+
+            WorldStateData.reload()
+
+            CommandUtils.initTaskQueue(WorldStateData.taskList)
 
             CommandUtils.registerAll(WorldStateData.commandList)
 
+            CommandUtils.executeTask(WorldStateData.taskList)
+
             WFHelp(WorldState,WorldStateData.helpKey).register()
+
+            EditMaster.register()
+
+            EditTask.register()
 
             ChatCommandEditor.register()
 
+            SendToAllGroup.register()
+
             AbstractPermitteeId.AnyContact.permit(WorldState.parentPermission)
 
-            val cache = ExpirableCache(WorldStateData.cache)
+            ScheduleUtils.loopEvent(TaskSchedule.process, Date(),30*60*1000L,ConstantObject.TASK_HOLDER)
 
-            cache.put("aa","bb",6000L)
-
-            ScheduleUtils.loopEvent({ println(cache.keys.toString())}, Date(),500L)
         }
 
         globalEventChannel().subscribeAlways<MessageEvent> {
