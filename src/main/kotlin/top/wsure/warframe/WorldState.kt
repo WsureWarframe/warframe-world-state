@@ -25,7 +25,7 @@ object WorldState : KotlinPlugin(
 //        @OptIn(ConsoleExperimentalApi::class)
 //        JvmPluginDescription.loadFromResource()
     JvmPluginDescription(
-        version = "0.0.4",
+        version = "0.0.5",
         id = "top.wsure.warframe.WorldState",
         name = "WarframeWorldState",
     )
