@@ -47,8 +47,8 @@
 4. 修改`config\Console\AutoLogin`文件中的qq 123456和密码 pwd，保存
 5. 再运行mcl脚本，直到最后跑完，中间报错无视，运行完成后退出，确保一定要退出关掉。看到目录下生成了`bots`文件夹，里面有你的qq号文件夹，进去之后有个deviceInfo文件
 6. 现在开始你有3个选择让这份device文件绑定此qq：
-   1. 将pc的deviceInfo.json传给手机上的MiraiAndroid导入后登录，完成device.json和qq的绑定
-   2. 在手机上的MiraiAndroid登录QQ后导出device.json分享到pc，替换此deviceInfo.json
+   1. 在手机上的MiraiAndroid登录QQ后导出device.json分享到pc，替换此deviceInfo.json
+   2. 将pc的deviceInfo.json传给手机上的MiraiAndroid导入后登录，完成device.json和qq的绑定（由于MiraiAndroid的导入device.json在调用系统文件选择器时候可能会报错，建议手动移动文件到/sdcard/Android/data/io.github.mzdluo123.mirai.android/files/device.json）
    3. 使用[`mirai-login-solver-selenium`](https://github.com/project-mirai/mirai-login-solver-selenium) 插件,使用方法自己看 (不过我并不推荐，你可能需要安装浏览器，并且设置chrome为默认浏览器)
 7. 绑定了device.json和qq之后，你就可以把插件放进plugin目录，运行mcl开始使用了
 # 默认指令列表  
