@@ -1,57 +1,20 @@
-# warframe-world-state
-## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，现在已经转战Mirai
-### 兼容Mirai-Console (Windows/MacOS/Linux)
-    最新:
-    Mirai-Console 2.4.0+ -> 0.0.4
-    历史:
-    Mirai-Console 2.0.0 ->  0.0.3 
-    Mirai-Console 0.5.2 ->  0.0.2-alpha
-                            0.0.1-alpha
-### 兼容MiraiAndroid (Android)
-    最新: 
-    MiraiAndroid 3.1.0+ ->  0.0.4
-    历史:
-    MiraiAndroid 3.0.0 ->   0.0.3
-    MiraiAndroid 2.10.4 ->  0.0.2-alpha
-                            0.0.1-alpha
-### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api) 提供给接口服务
+# warframe-world-state 
+## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，~~现在已经转战Mirai~~ ,在等待新的框架
+# 注意⚠️:本项目停止对Mirai支持分支的更新,现有与mirai相关部分不再维护，但仍可继续使用。待迁移完成后，将归档为`mirai-archived`分支
+### 放弃Mirai原因：篇幅较长,建议跳过
+      1.直接原因：被狗咬，所以玩不起了
+      2.客观原因；使用麻烦、文档简陋（没几行示例，api全靠猜，抄都难找）、部署繁琐
+      3.核心原因：mirai社区氛围对一般java开发者并不友好，虽然核心圈子里有几位大牛值得佩服，但是他们的时间大多用于维护项目，文档写的比较简陋。
+      某些👅🐶自己也不会，别人提问也不会答，就只会乱咬。如果只是缺少文档，自己踩坑摸索也不是什么事，但是这种🐶太恶心人，炸掉的主群里以前很多，
+      我退了，没想到调*板那种群也有，啧啧。人家大牛🐮🍺是人家的本事，那些🐶自己都没用过也不懂，该不会觉得和大牛水群多了自己也是大牛了吧？
+      想到我们写的插件将来被这种仪仗着大牛🐶眼看人低的🐶拿来做谈资，觉得还蛮好笑的，将来人家简历上写参与过xx项目，使用者多少多少，我就觉得讽刺
+## 注意⚠️：此插件禁止在`mirai`官方相关渠道传播，包括但不限于`mirai官方插件中心`、`mirai官方论坛`、`mirai项目相关qq群`，请勿自行上传自讨没趣
+
 # warframe-world-state （Warframe世界状态查询插件）
-- 群：[435021808](https://jq.qq.com/?_wv=1027&k=rGrjxfv0) 
+- 群：[435021808](https://jq.qq.com/?_wv=1027&k=rGrjxfv0)
 # 特色
-- 支持warframe世界状态查询、包括赏金任务  
-# MiraiAndroid安装方法 (Android)
-0. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid` 最新版 (兼容性查看上方)
-1. 在安卓手机上安装MiraiAndroid
-2. 选择1:`jar插件` (如无法正常安装请尝试`选择2`)
-    - 从 [warframe-world-stat/release](https://github.com/WsureDev/warframe-world-state/releases) 下载 最新版 插件(兼容性查看上方)
-    - 点击左上角 
-    - 插件管理
-    - 如果以前安装过本插件，无论apk还是jar，都先删除
-    - 选择右上角添加本插件 
-    - 点击导入（保持默认）
-    - 输入warframe.jar
-    - 等待编译完成
-3. 选择2:`apk插件`
-    - 从[warframe-world-state-apk/release](https://github.com/WsureDev/warframe-world-state-apk/releases) 下载 最新版 插件(兼容性查看上方)
-    - 点击左上角
-    - 插件管理
-    - 如果以前安装过本插件，无论apk还是jar，都先删除    
-    - 安装下载的apk插件
-4. 在界面右上角添加快速登录的qq号和密码
-5. 点击左上角 选择快速重启
-# Mirai-Console安装方法 (Windows/MacOS/Linux)
-0. 准备工作: 下载[MCL一键版](https://github.com/iTXTech/mcl-installer/releases) 和  [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) ,如果缺少`DLL`,请下载`vc++2015` 
-1. 新建一个空文件夹把mcl安装器放进去运行 ，windows直接双击就能跑，linux和macOS自己给可执行文件赋权。跑起来之后一路回车，直到最后退出。
-2. mcl一键程序最后一步是给你下载mcl脚本包，如果这一步因为网络原因失败了，请重复执行。或者自己手动下载 [mcl脚本包](https://github.com/iTXTech/mirai-console-loader/releases) ，解压到这个位置，然后自己改mcl脚本里的java目录
-3. 运行mcl脚本，运行完成后退出，确保一定要退出关掉
-4. 修改`config\Console\AutoLogin`文件中的qq 123456和密码 pwd，保存
-5. 再运行mcl脚本，直到最后跑完，中间报错无视，运行完成后退出，确保一定要退出关掉。看到目录下生成了`bots`文件夹，里面有你的qq号文件夹，进去之后有个deviceInfo文件
-6. 现在开始你有3个选择让这份device文件绑定此qq：
-   1. 在手机上的MiraiAndroid登录QQ后导出device.json分享到pc，替换此deviceInfo.json
-   2. 将pc的deviceInfo.json传给手机上的MiraiAndroid导入后登录，完成device.json和qq的绑定（由于MiraiAndroid的导入device.json在调用系统文件选择器时候可能会报错，建议手动移动文件到/sdcard/Android/data/io.github.mzdluo123.mirai.android/files/device.json）
-   3. 使用[`mirai-login-solver-selenium`](https://github.com/project-mirai/mirai-login-solver-selenium) 插件,使用方法自己看 (不过我并不推荐，你可能需要安装浏览器，并且设置chrome为默认浏览器)
-7. 绑定了device.json和qq之后，你就可以把插件放进plugin目录，运行mcl开始使用了
-# 默认指令列表  
+- 支持warframe世界状态查询、包括赏金任务
+# 默认指令列表
     warframe.market: 
         wm 关键词
         
@@ -95,6 +58,55 @@
       查看master列表: master list
       添加master: master add <qq或者at>
       删除master: master del <qq或者at>
+### 兼容Mirai-Console (Windows/MacOS/Linux)
+    最新:
+    Mirai-Console 2.4.0+ -> 0.0.4
+    历史:
+    Mirai-Console 2.0.0 ->  0.0.3 
+    Mirai-Console 0.5.2 ->  0.0.2-alpha
+                            0.0.1-alpha
+### 兼容MiraiAndroid (Android)
+    最新: 
+    MiraiAndroid 3.1.0+ ->  0.0.4
+    历史:
+    MiraiAndroid 3.0.0 ->   0.0.3
+    MiraiAndroid 2.10.4 ->  0.0.2-alpha
+                            0.0.1-alpha
+### 项目依赖[【warframe-info-api】](https://github.com/WsureDev/warframe-info-api) 提供给接口服务
+
+# MiraiAndroid安装方法 (Android)
+0. 从 [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) 下载 `MiraiAndroid` 最新版 (兼容性查看上方)
+1. 在安卓手机上安装MiraiAndroid
+2. 选择1:`jar插件` (如无法正常安装请尝试`选择2`)
+    - 从 [warframe-world-stat/release](https://github.com/WsureDev/warframe-world-state/releases) 下载 最新版 插件(兼容性查看上方)
+    - 点击左上角 
+    - 插件管理
+    - 如果以前安装过本插件，无论apk还是jar，都先删除
+    - 选择右上角添加本插件 
+    - 点击导入（保持默认）
+    - 输入warframe.jar
+    - 等待编译完成
+3. 选择2:`apk插件`
+    - 从[warframe-world-state-apk/release](https://github.com/WsureDev/warframe-world-state-apk/releases) 下载 最新版 插件(兼容性查看上方)
+    - 点击左上角
+    - 插件管理
+    - 如果以前安装过本插件，无论apk还是jar，都先删除    
+    - 安装下载的apk插件
+4. 在界面右上角添加快速登录的qq号和密码
+5. 点击左上角 选择快速重启
+# Mirai-Console安装方法 (Windows/MacOS/Linux)
+0. 准备工作: 下载[MCL一键版](https://github.com/iTXTech/mcl-installer/releases) 和  [MiraiAndroid](https://github.com/mzdluo123/MiraiAndroid/releases) ,如果缺少`DLL`,请下载`vc++2015` 
+1. 新建一个空文件夹把mcl安装器放进去运行 ，windows直接双击就能跑，linux和macOS自己给可执行文件赋权。跑起来之后一路回车，直到最后退出。
+2. mcl一键程序最后一步是给你下载mcl脚本包，如果这一步因为网络原因失败了，请重复执行。或者自己手动下载 [mcl脚本包](https://github.com/iTXTech/mirai-console-loader/releases) ，解压到这个位置，然后自己改mcl脚本里的java目录
+3. 运行mcl脚本，运行完成后退出，确保一定要退出关掉
+4. 修改`config\Console\AutoLogin`文件中的qq 123456和密码 pwd，保存
+5. 再运行mcl脚本，直到最后跑完，中间报错无视，运行完成后退出，确保一定要退出关掉。看到目录下生成了`bots`文件夹，里面有你的qq号文件夹，进去之后有个deviceInfo文件
+6. 现在开始你有3个选择让这份device文件绑定此qq：
+   1. 在手机上的MiraiAndroid登录QQ后导出device.json分享到pc，替换此deviceInfo.json
+   2. 将pc的deviceInfo.json传给手机上的MiraiAndroid导入后登录，完成device.json和qq的绑定（由于MiraiAndroid的导入device.json在调用系统文件选择器时候可能会报错，建议手动移动文件到/sdcard/Android/data/io.github.mzdluo123.mirai.android/files/device.json）
+   3. 使用[`mirai-login-solver-selenium`](https://github.com/project-mirai/mirai-login-solver-selenium) 插件,使用方法自己看 (不过我并不推荐，你可能需要安装浏览器，并且设置chrome为默认浏览器)
+7. 绑定了device.json和qq之后，你就可以把插件放进plugin目录，运行mcl开始使用了
+
 # 开发记录：MiraiAndroid兼容踩坑
 0. 插件特点: 这是一个全平台Mirai兼容的插件，集成了h2作为db，如果你也在寻找兼容MiraiAndroid的数据库集成方案，我向你推荐h2+Exposed
 1. 失败经验：mybatisPlus、mybatis、ktorm、sqlite jdbc在MiraiAndroid上无法运行(扫包路径问题、MiraiAndroid内二次打包文件过滤问题、安卓so文件加载问题、Android.jar与rt.jar区别)。
