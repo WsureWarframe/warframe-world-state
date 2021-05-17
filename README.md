@@ -60,15 +60,17 @@
       删除master: master del <qq或者at>
 ### 兼容Mirai-Console (Windows/MacOS/Linux)
     最新:
-    Mirai-Console 2.4.0+ -> 0.0.4
+    Mirai-Console 2.6.0  -> 0.0.5
     历史:
+    Mirai-Console 2.4.0+ -> 0.0.4
     Mirai-Console 2.0.0 ->  0.0.3 
     Mirai-Console 0.5.2 ->  0.0.2-alpha
                             0.0.1-alpha
 ### 兼容MiraiAndroid (Android)
     最新: 
-    MiraiAndroid 3.1.0+ ->  0.0.4
+    MiraiAndroid 3.1.2  ->  0.0.5
     历史:
+    MiraiAndroid 3.1.0+ ->  0.0.4
     MiraiAndroid 3.0.0 ->   0.0.3
     MiraiAndroid 2.10.4 ->  0.0.2-alpha
                             0.0.1-alpha
@@ -106,6 +108,10 @@
    2. 将pc的deviceInfo.json传给手机上的MiraiAndroid导入后登录，完成device.json和qq的绑定（由于MiraiAndroid的导入device.json在调用系统文件选择器时候可能会报错，建议手动移动文件到/sdcard/Android/data/io.github.mzdluo123.mirai.android/files/device.json）
    3. 使用[`mirai-login-solver-selenium`](https://github.com/project-mirai/mirai-login-solver-selenium) 插件,使用方法自己看 (不过我并不推荐，你可能需要安装浏览器，并且设置chrome为默认浏览器)
 7. 绑定了device.json和qq之后，你就可以把插件放进plugin目录，运行mcl开始使用了
+8. 由于MCL会强制自动更新版本，为了你的项目稳定运行，请按照上方兼容版本固定自己的Mirai-console版本。（强烈建议）
+   0. 切记一定要先停止mirai
+   1. 打开你的mcl脚本，在`mcl.jar`末尾添加参数` -u -x` ,表示使用指定版本
+   2. 打开`config.json`文件，修改三个`version`值为你需要的版本号
 
 # 开发记录：MiraiAndroid兼容踩坑
 0. 插件特点: 这是一个全平台Mirai兼容的插件，集成了h2作为db，如果你也在寻找兼容MiraiAndroid的数据库集成方案，我向你推荐h2+Exposed
