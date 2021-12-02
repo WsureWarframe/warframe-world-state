@@ -27,7 +27,7 @@ class WFSimpleCommand(
 
     private val logger: MiraiLogger = MiraiConsole.createLogger(command.name)
 
-    @ExperimentalCommandDescriptors
+    @OptIn(ExperimentalCommandDescriptors::class)
     override val prefixOptional = true
 
     @Handler

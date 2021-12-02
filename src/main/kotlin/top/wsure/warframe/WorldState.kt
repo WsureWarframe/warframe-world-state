@@ -31,16 +31,16 @@ object WorldState : KotlinPlugin(
     )
 ) {
 
-    @ExperimentalCommandDescriptors
-    @ConsoleExperimentalApi
+    @OptIn(ExperimentalCommandDescriptors::class, ConsoleExperimentalApi::class)
     override fun onEnable() {
         val osName = System.getProperty("os.name").split(" ")[0]
         val osArch = System.getProperty("os.arch")
         logger.info{"os.name:${osName}"}
         logger.info{"os.arch:${osArch}"}
         logger.info{"os.version:${System.getProperty("os.version")}"}
-
-        WorldState.launch {
+        WorldStateData.reload()
+        WorldStateData.host
+        launch {
 
             WorldStateData.commandList = CommandUtils.getRemoteCommand(WorldStateData.host)
 

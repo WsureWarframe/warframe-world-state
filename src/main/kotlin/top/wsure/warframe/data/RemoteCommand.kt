@@ -23,6 +23,7 @@ data class RemoteCommand(
     val desc: String,
 )
 
+@Serializable
 enum class CommandType{
     PARAM,
     SIMPLE

@@ -32,5 +32,5 @@ object WorldStateData : AutoSavePluginConfig("WorldStateData") {
 
     var groupTaskSetting: MutableMap<Long,MutableMap<String,Boolean>> by value(HashMap())
 
-    var cache: ConcurrentMap<String, CacheValue<String>> by value(ConcurrentHashMap())
+    var cache: MutableMap<String, CacheValue<String>> by value(HashMap())
 }

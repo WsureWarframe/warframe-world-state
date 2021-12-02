@@ -20,7 +20,7 @@ object SendToAllGroup : RawCommand(
 ) {
     private val logger: MiraiLogger = MiraiConsole.createLogger(this.javaClass.canonicalName)
 
-    @ExperimentalCommandDescriptors
+    @OptIn(ExperimentalCommandDescriptors::class)
     override val prefixOptional = true
 
     override suspend fun CommandSender.onCommand(args: MessageChain) {
