@@ -1,13 +1,8 @@
 # warframe-world-state 
-## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，~~现在已经转战Mirai~~ ,在等待新的框架
-# 注意⚠️:本项目停止对Mirai支持分支的更新,现有与mirai相关部分不再维护，但仍可继续使用。待迁移完成后，将归档为`mirai-archived`分支
-### 放弃Mirai原因：篇幅较长,建议跳过
-      1.直接原因：被狗咬，所以玩不起了
-      2.客观原因；使用麻烦、文档简陋（没几行示例，api全靠猜，抄都难找）、部署繁琐
-      3.核心原因：mirai社区氛围对一般java开发者并不友好，虽然核心圈子里有几位大牛值得佩服，但是他们的时间大多用于维护项目，文档写的比较简陋。
-      某些👅🐶自己也不会，别人提问也不会答，就只会乱咬。如果只是缺少文档，自己踩坑摸索也不是什么事，但是这种🐶太恶心人，炸掉的主群里以前很多，
-      我退了，没想到调*板那种群也有，啧啧。人家大牛🐮🍺是人家的本事，那些🐶自己都没用过也不懂，该不会觉得和大牛水群多了自己也是大牛了吧？
-      想到我们写的插件将来被这种仪仗着大牛🐶眼看人低的🐶拿来做谈资，觉得还蛮好笑的，将来人家简历上写参与过xx项目，使用者多少多少，我就觉得讽刺
+## 欢迎回来，这里是Wsure的第三代Warframe插件，由于酷Q倒闭，~~现在已经转战Mirai~~ ,现在正在向Websocket框架（go-cqhttp、official-guild）迁移
+# 注意⚠️:本项目停止对Mirai支持分支的更新,现有与mirai相关部分不再维护，但仍可在特定版本下继续使用(详见下表)。待迁移完成后，将归档为`mirai-archived`分支
+### 
+      
 ## 注意⚠️：此插件禁止在`mirai`官方相关渠道传播，包括但不限于`mirai官方插件中心`、`mirai官方论坛`、`mirai项目相关qq群`，请勿自行上传自讨没趣
 
 # warframe-world-state （Warframe世界状态查询插件）
@@ -60,16 +55,18 @@
       删除master: master del <qq或者at>
 ### 兼容Mirai-Console (Windows/MacOS/Linux)
     最新:
-    Mirai-Console 2.6.0  -> 0.0.5
+    Mirai-Console 2.8.0  -> 0.0.6
     历史:
+    Mirai-Console 2.6.0  -> 0.0.5
     Mirai-Console 2.4.0+ -> 0.0.4
     Mirai-Console 2.0.0 ->  0.0.3 
     Mirai-Console 0.5.2 ->  0.0.2-alpha
                             0.0.1-alpha
 ### 兼容MiraiAndroid (Android)
     最新: 
-    MiraiAndroid 3.1.2  ->  0.0.5
+    MiraiAndroid 3.3.4  ->  0.0.6
     历史:
+    MiraiAndroid 3.1.2  ->  0.0.5
     MiraiAndroid 3.1.0+ ->  0.0.4
     MiraiAndroid 3.0.0 ->   0.0.3
     MiraiAndroid 2.10.4 ->  0.0.2-alpha
