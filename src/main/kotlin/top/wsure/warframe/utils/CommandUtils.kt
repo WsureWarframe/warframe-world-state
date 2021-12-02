@@ -24,7 +24,7 @@ import java.util.*
  */
 class CommandUtils {
     companion object {
-        private val logger: MiraiLogger = MiraiLogger.create(this::class.java.name)
+        private val logger: MiraiLogger = MiraiLogger.Factory.create(CommandUtils::class, this::class.java.name)
         suspend fun getRemoteCommand(host:String):List<RemoteCommand> {
             logger.info("加载远程指令列表-开始,host:${host}")
             var res = emptyList<RemoteCommand>()

@@ -26,7 +26,7 @@ object EditTask : CompositeCommand(
     "任务", "定时任务",
     description = "定时任务设置"
 ) {
-    @ExperimentalCommandDescriptors
+    @OptIn(ExperimentalCommandDescriptors::class)
     @ConsoleExperimentalApi
     override val prefixOptional = true
 

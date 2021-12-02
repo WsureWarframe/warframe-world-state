@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentMap
  * Description:
  */
 class ExpirableCache<K>(
-    private val delegate: ConcurrentMap<K, CacheValue<K>>
-) : ConcurrentMap<K, CacheValue<K>> by delegate {
+    private val delegate: MutableMap<K, CacheValue<K>>
+) : MutableMap<K, CacheValue<K>> by delegate {
     companion object{
         val CACHE_MAP = CacheHolder.holder
     }
