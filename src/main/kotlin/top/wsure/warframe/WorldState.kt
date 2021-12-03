@@ -38,12 +38,11 @@ object WorldState : KotlinPlugin(
         logger.info{"os.version:${System.getProperty("os.version")}"}
 
         launch {
+            WorldStateData.reload()
 
             WorldStateData.commandList = CommandUtils.getRemoteCommand(WorldStateData.host)
 
             WorldStateData.taskList = CommandUtils.getRemoteTask(WorldStateData.host)
-
-            WorldStateData.reload()
 
             CommandUtils.initTaskQueue(WorldStateData.taskList)
 
