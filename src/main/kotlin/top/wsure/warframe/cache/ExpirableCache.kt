@@ -1,11 +1,8 @@
 package top.wsure.warframe.cache
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import net.mamoe.mirai.console.data.SerializerAwareValue
 import top.wsure.warframe.data.WorldStateData
-import java.util.concurrent.ConcurrentMap
+import top.wsure.warframe.utils.JsonUtils.jsonToObject
+import top.wsure.warframe.utils.JsonUtils.objectToJson
 
 /**
  * FileName: ExpirableCache
@@ -33,9 +30,9 @@ class ExpirableCache<K>(
             return delegate.keys
         }
 
-    fun put(k: K, v: Any?, wait: Long?) {
+    fun put(k: K, v: Any, wait: Long?) {
         val timeout = if (wait == null) 0 else (wait + System.currentTimeMillis())
-        delegate[k] = CacheValue(k, Json.encodeToString(v), timeout)
+        delegate[k] = CacheValue(k, v.objectToJson(), timeout)
     }
 
     override fun remove(key: K): CacheValue<K>? {
@@ -49,7 +46,7 @@ class ExpirableCache<K>(
     }
 
     inline fun <reified T> getData(key:K):T? {
-        return get(key)?.value?.let { Json{ ignoreUnknownKeys = true }.decodeFromString<T>(it) }
+        return get(key)?.value?.jsonToObject()
     }
 
     private fun recycle() {
