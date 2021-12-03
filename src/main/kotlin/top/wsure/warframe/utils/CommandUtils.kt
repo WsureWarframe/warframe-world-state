@@ -2,10 +2,12 @@ package top.wsure.warframe.utils
 
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.console.command.CommandManager.INSTANCE.register
+import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.contact.User
 import net.mamoe.mirai.message.data.Message
 import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.message.data.buildForwardMessage
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.WorldState

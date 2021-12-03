@@ -51,7 +51,7 @@ class ExpirableCache<K>(
 
     private fun recycle() {
         val now = System.currentTimeMillis()
-        delegate.values.stream()
+        delegate.values
             .filter { it.timeout != 0L && now > it.timeout }
             .map { it.key }
             .forEach { delegate.remove(it) }
