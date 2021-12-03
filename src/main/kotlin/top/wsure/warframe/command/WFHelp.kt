@@ -4,7 +4,9 @@ import net.mamoe.mirai.console.command.CommandOwner
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.command.isConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.message.data.buildForwardMessage
 import top.wsure.warframe.data.WorldStateData
 import top.wsure.warframe.utils.CommandUtils
 
@@ -26,7 +28,16 @@ class WFHelp(
     @Handler
     suspend fun CommandSender.handle() { // 函数名随意, 但参数需要按顺序放置.
 
-        sendMessage(CommandUtils.getRemoteCommandHelp(WorldStateData.commandList))
+        val responseMsg = CommandUtils.getRemoteCommandHelp(WorldStateData.commandList)
+
+        if(isConsole()){
+            sendMessage(responseMsg)
+        } else {
+            sendMessage(buildForwardMessage(this.subject!!) {
+                val bot = this@handle.bot!!
+                add(bot,responseMsg)
+            })
+        }
 
     }
 }

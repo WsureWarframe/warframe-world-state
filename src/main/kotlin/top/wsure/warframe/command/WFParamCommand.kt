@@ -5,8 +5,11 @@ import net.mamoe.mirai.console.command.CommandOwner
 import net.mamoe.mirai.console.command.CommandSender
 import net.mamoe.mirai.console.command.RawCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
+import net.mamoe.mirai.console.command.isConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
+import net.mamoe.mirai.message.data.ForwardMessageBuilder
 import net.mamoe.mirai.message.data.MessageChain
+import net.mamoe.mirai.message.data.buildForwardMessage
 import net.mamoe.mirai.message.data.content
 import net.mamoe.mirai.utils.MiraiLogger
 import top.wsure.warframe.data.RemoteCommand
@@ -38,7 +41,16 @@ class WFParamCommand(
         val msg = args.joinToString(" ") { it.content }
         val remoteUrl = WorldStateData.host + command.path + msg
         logger.info("${this.user?.nick} 查询 $remoteUrl")
-        sendMessage(CommandUtils.getRemoteResponse(remoteUrl,this.bot,this.user))
+        val responseMsg = CommandUtils.getRemoteResponse(remoteUrl,this.bot,this.user)
+        if(isConsole()){
+            sendMessage(responseMsg)
+        } else {
+            sendMessage(buildForwardMessage(this.subject!!) {
+                val bot = this@onCommand.bot!!
+                add(bot,responseMsg)
+            })
+        }
+
     }
 
 }
