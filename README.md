@@ -55,8 +55,9 @@
       删除master: master del <qq或者at>
 ### 兼容Mirai-Console (Windows/MacOS/Linux)
     最新:
-    Mirai-Console 2.8.0  -> 0.0.6
+    Mirai-Console 2.8.0  -> 0.0.7
     历史:
+    Mirai-Console 2.8.0  -> 0.0.6
     Mirai-Console 2.6.0  -> 0.0.5
     Mirai-Console 2.4.0+ -> 0.0.4
     Mirai-Console 2.0.0 ->  0.0.3 
@@ -64,8 +65,9 @@
                             0.0.1-alpha
 ### 兼容MiraiAndroid (Android)
     最新: 
-    MiraiAndroid 3.3.4  ->  0.0.6
+    MiraiAndroid 3.3.4  ->  0.0.7
     历史:
+    MiraiAndroid 3.3.4  ->  0.0.6
     MiraiAndroid 3.1.2  ->  0.0.5
     MiraiAndroid 3.1.0+ ->  0.0.4
     MiraiAndroid 3.0.0 ->   0.0.3
