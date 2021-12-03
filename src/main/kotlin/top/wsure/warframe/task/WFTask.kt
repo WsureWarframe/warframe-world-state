@@ -1,7 +1,5 @@
 package top.wsure.warframe.task
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.util.ConsoleExperimentalApi
 import net.mamoe.mirai.message.data.content
@@ -13,6 +11,7 @@ import top.wsure.warframe.data.RemoteTask
 import top.wsure.warframe.data.TaskEnum
 import top.wsure.warframe.data.WorldStateData
 import top.wsure.warframe.utils.CommandUtils
+import top.wsure.warframe.utils.JsonUtils.objectToJson
 import top.wsure.warframe.utils.NotifyUtils
 import top.wsure.warframe.utils.OkHttpUtils
 
@@ -93,6 +92,6 @@ class WFTask(private val remoteTask: RemoteTask) {
     private fun storeQueue(remoteTask: RemoteTask, queues: List<RemoteQueue>) {
         val cacheKey = cacheQueueName(remoteTask)
         ExpirableCache.CACHE_MAP[cacheKey] =
-            CacheValue(cacheKey, Json.encodeToString(queues), queues.maxOf { it.timeout })
+            CacheValue(cacheKey, queues.objectToJson(), queues.maxOf { it.timeout })
     }
 }
