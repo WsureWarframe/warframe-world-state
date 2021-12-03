@@ -33,13 +33,10 @@ object WorldState : KotlinPlugin(
 
     @OptIn(ExperimentalCommandDescriptors::class, ConsoleExperimentalApi::class)
     override fun onEnable() {
-        val osName = System.getProperty("os.name").split(" ")[0]
-        val osArch = System.getProperty("os.arch")
-        logger.info{"os.name:${osName}"}
-        logger.info{"os.arch:${osArch}"}
+        logger.info{"os.name:${System.getProperty("os.name")}"}
+        logger.info{"os.arch:${System.getProperty("os.arch")}"}
         logger.info{"os.version:${System.getProperty("os.version")}"}
-        WorldStateData.reload()
-        WorldStateData.host
+
         launch {
 
             WorldStateData.commandList = CommandUtils.getRemoteCommand(WorldStateData.host)
@@ -76,7 +73,7 @@ object WorldState : KotlinPlugin(
                     this.toCommandSender()
                 }.getOrNull() ?: return@subscribeAlways
 
-                WorldState.launch { // Async
+                launch { // Async
                     runCatching {
                         CommandManager.executeCommand(sender, message)
                     }
