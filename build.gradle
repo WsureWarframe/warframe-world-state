@@ -1,15 +1,15 @@
 plugins {
-    id("net.mamoe.mirai-console") version "2.8.0" // mirai-console version
+    id("net.mamoe.mirai-console") version "2.8.2" // mirai-console version
     id 'org.jetbrains.kotlin.jvm' version "1.5.30"
     id 'org.jetbrains.kotlin.plugin.serialization' version "1.5.30"
 }
 
 mirai {
-    coreVersion = "2.8.0" // mirai-core version
+    coreVersion = "2.8.2" // mirai-core version
 }
 
 group = "top.wsure.warframe"
-version = "0.0.7"
+version = "0.0.7-fix"
 
 repositories {
     mavenLocal()
@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

@@ -16,7 +16,8 @@ object JsonUtils {
     val formatter = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
-        explicitNulls = false
+        // 等mirai 更新json依赖
+//        explicitNulls = false
     }
 
     @OptIn(ExperimentalSerializationApi::class)
