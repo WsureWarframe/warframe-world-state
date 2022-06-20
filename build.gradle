@@ -1,11 +1,11 @@
 plugins {
-    id("net.mamoe.mirai-console") version "2.8.2" // mirai-console version
+    id("net.mamoe.mirai-console") version "2.11.0" // mirai-console version
     id 'org.jetbrains.kotlin.jvm' version "1.5.30"
     id 'org.jetbrains.kotlin.plugin.serialization' version "1.5.30"
 }
 
 mirai {
-    coreVersion = "2.8.2" // mirai-core version
+    coreVersion = "2.11.0" // mirai-core version
 }
 
 group = "top.wsure.warframe"
