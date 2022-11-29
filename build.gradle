@@ -9,7 +9,7 @@ mirai {
 }
 
 group = "top.wsure.warframe"
-version = "0.0.7-fix"
+version = "0.0.7-fix-0.2"
 
 repositories {
     mavenLocal()

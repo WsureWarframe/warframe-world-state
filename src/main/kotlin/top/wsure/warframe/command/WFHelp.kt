@@ -2,6 +2,7 @@ package top.wsure.warframe.command
 
 import net.mamoe.mirai.console.command.CommandOwner
 import net.mamoe.mirai.console.command.CommandSender
+import net.mamoe.mirai.console.command.ConsoleCommandSender.sendMessage
 import net.mamoe.mirai.console.command.SimpleCommand
 import net.mamoe.mirai.console.command.descriptor.ExperimentalCommandDescriptors
 import net.mamoe.mirai.console.command.isConsole
@@ -21,8 +22,7 @@ class WFHelp(
     plugin: CommandOwner,
     helpKey:String,
 ) : SimpleCommand(plugin, primaryName = helpKey, description = "插件帮助指令"){
-
-    @ExperimentalCommandDescriptors
+    @OptIn(ExperimentalCommandDescriptors::class)
     override val prefixOptional = true
 
     @Handler
@@ -33,10 +33,11 @@ class WFHelp(
         if(isConsole()){
             sendMessage(responseMsg)
         } else {
-            sendMessage(buildForwardMessage(this.subject!!) {
-                val bot = this@handle.bot!!
-                add(bot,responseMsg)
-            })
+//            sendMessage(buildForwardMessage(this.subject!!) {
+//                val bot = this@handle.bot!!
+//                add(bot,responseMsg)
+//            })
+            sendMessage(responseMsg)
         }
 
     }
